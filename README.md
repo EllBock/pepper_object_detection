@@ -1,1 +1,1 @@
-# PepperObjectRecognition
+# Object Recognition with Pepper
