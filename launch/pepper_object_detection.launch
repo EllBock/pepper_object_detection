@@ -1,0 +1,7 @@
+<launch>
+	<node name="detector_node" pkg="pepper_object_detection" type="detector_node" output="screen" />
+	<node name="visualization_node" pkg="pepper_object_detection" type="visualization_node" output="screen" />
+	<node name="tts_server" pkg="pepper_object_detection" type="pepper_tts_server.py" output="screen" />
+	<node name="master" pkg="pepper_object_detection" type="master.py" output="screen" />
+    <rosparam file="$(find pepper_object_detection)/config/default.yaml" />
+</launch>

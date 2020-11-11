@@ -1,0 +1,3 @@
+pepper_cam_topic: /prova
+input_image_topic: /testcam/image_raw
+detection_topic: /pepper_object_detection/detection
