@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import rospy
 from threading import Lock
 import ros_numpy
@@ -26,7 +27,7 @@ input_image_topic = rospy.get_param('input_image_topic')
 
 rospy.init_node('master_node')
 
-sub = rospy.Subscriber(pepper_cam_topic, TIPO_DI_PEPPER, rcv_image, queue_size=1)
+sub = rospy.Subscriber(pepper_cam_topic, Image, rcv_image, queue_size=1)
 pub = rospy.Publisher(input_image_topic, Image, queue_size=1)
 
 rospy.loginfo('Master initialized')
