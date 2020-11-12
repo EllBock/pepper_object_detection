@@ -7,7 +7,7 @@ from pepper_object_detection.srv import pepper_tts
 class AnimatedSay(NaoqiNode):
 
     def __init__(self):
-        NaoqiNode.__init__(self,'animated_speech')
+        NaoqiNode.__init__(self,'pepper_tts') # name of the ROS node, not the Aldebaran module
         self.connectNaoQi()
         pass
 
@@ -18,7 +18,7 @@ class AnimatedSay(NaoqiNode):
         return SayResponse(True)
 
     def connectNaoQi(self):
-        self.speech=self.get_proxy("ALAnimatedSpeech")
+        self.speech=self.get_proxy("ALTextToSpeech")
         self.s = rospy.Service('pepper_tts', pepper_tts, self.say)
 
 

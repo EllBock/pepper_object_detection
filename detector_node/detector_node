@@ -28,7 +28,7 @@ def rcv_image(msg):
 
 
 rospack = rospkg.RosPack()
-DET_PATH=rospack.get_path('pepper_object_detection')+'efficientdet_d1_coco17_tpu-32'
+DET_PATH=rospack.get_path('pepper_object_detection')+'/efficientdet_d1_coco17_tpu-32'
 mydetector = Detector(DET_PATH)
 
 rospy.init_node('detector_node')
