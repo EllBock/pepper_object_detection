@@ -27,11 +27,11 @@ def rcv_image(msg):
     rospy.loginfo("published")
 
 
-rospack = rospkg.RosPack()
-DET_PATH=rospack.get_path('pepper_object_detection')+'/efficientdet_d1_coco17_tpu-32'
-mydetector = Detector(DET_PATH)
-
 rospy.init_node('detector_node')
+
+detector_path = rospy.get_param('detector_path')+'/saved_model/'
+print('Loading model from: ', detector_path) # rospy.loginfo not working
+mydetector = Detector(detector_path)
 
 detection_topic = rospy.get_param('detection_topic')
 input_image_topic = rospy.get_param('input_image_topic')

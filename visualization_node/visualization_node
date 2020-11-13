@@ -66,8 +66,8 @@ image = None
 
 detection_topic = rospy.get_param('detection_topic')
 input_image_topic = rospy.get_param('input_image_topic')
-si = rospy.Subscriber(detection_topic, Image, rcv_image)
-sd = rospy.Subscriber(input_image_topic, Detection2DArray, rcv_detection)
+si = rospy.Subscriber(input_image_topic, Image, rcv_image)
+sd = rospy.Subscriber(detection_topic, Detection2DArray, rcv_detection)
 
 rospy.loginfo('Visualization node initialized')
 

@@ -1,1 +1,3 @@
 .vscode/
+detector_node/__pycache__/
+visualization_node/__pycache__/
