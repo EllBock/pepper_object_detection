@@ -3,6 +3,7 @@
 import rospy, tty, sys, select
 from std_msgs.msg import String
 from naoqi_bridge_msgs.msg import JointAnglesWithSpeed
+import almath
 
 movements = {
         'a':[0*almath.TO_RAD, -5*almath.TO_RAD],
@@ -30,7 +31,7 @@ if __name__ == '__main__':
         while(1):
             key = getKey()
             if key in movements.keys():
-                s.joint_angles= movements[command]
+                s.joint_angles= movements[key]
                 rospy.loginfo(s.joint_angles)
                 p.publish(s)
             rate.sleep()
