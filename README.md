@@ -11,8 +11,8 @@
     ```
 3. Change the detector model path in ``config/default.yaml`` accordingly.
 4. ```bash
-   echo 'export PYTHONPATH=${PYTHONPATH}:/home/mivia/<PATH>/pynaoqi-python2.7-2.5.7.1-linux64/lib/python2.7/site-packages' >> devel/setup.bash
-   echo 'export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:$/home/mivia/<PATH>/pynaoqi-python2.7-2.5.7.1-linux64/lib' >> devel/setup.bash
+   echo 'export PYTHONPATH=${PYTHONPATH}:/home/mivia/cogrob_git/pynaoqi-python2.7-2.5.7.1-linux64/lib/python2.7/site-packages' >> devel/setup.bash
+   echo 'export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:$/home/mivia/cogrob_git/pynaoqi-python2.7-2.5.7.1-linux64/lib' >> devel/setup.bash
    ```
 
 ## Testing commands
