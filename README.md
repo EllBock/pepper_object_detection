@@ -9,4 +9,18 @@
     wget http://download.tensorflow.org/models/object_detection/tf2/20200711/efficientdet_d1_coco17_tpu-32.tar.gz
     tar -xvzf efficientdet_d1_coco17_tpu32.tar.gz
     ```
-3. Change ``config/default.yaml`` accordingly.
+3. Change the detector model path in ``config/default.yaml`` accordingly.
+4. ```bash
+   echo "export PYTHONPATH=${PYTHONPATH}:/home/mivia/<PATH>/pynaoqi-python2.7-2.5.7.1-linux64/lib/python2.7/site-packages" >> devel/setup.bash
+   echo "export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:$/home/mivia/<PATH>/pynaoqi-python2.7-2.5.7.1-linux64/lib" >> devel/setup.bash
+   ```
+
+## Testing commands
+```python
+roslaunch pepper_bringup pepper_full_py.launch nao_ip:=10.0.1.230
+rosparam load $(find pepper_object_detection)/config/default.yaml
+rosrun pepper_object_detection pose_node.py
+rosrun pepper_object_detection detector_node
+rosrun pepper_object_detection pepper_tts_server.py
+rosrun pepper_object_detection test_master_node.py
+```

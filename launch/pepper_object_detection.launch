@@ -1,10 +1,10 @@
 <launch>
 	<node name="detector_node" pkg="pepper_object_detection" type="detector_node" output="screen" />
-	<node name="visualization_node" pkg="pepper_object_detection" type="visualization_node" output="screen" />
+	<!-- <node name="visualization_node" pkg="pepper_object_detection" type="visualization_node" output="screen" /> -->
 	<node name="tts_server" pkg="pepper_object_detection" type="pepper_tts_server.py" output="screen">
 		<!-- Set Pepper's IP address. Definition is in /home/mivia/pepper_object_detection_ws/git_packages/naoqi_bridge/naoqi_driver_py/src/naoqi_driver/naoqi_node.py at line 74/80. -->
 		<!-- <param name="pip" value="0.0.0.1" /> -->
 	</node>
-	<node name="master" pkg="pepper_object_detection" type="test_master_node.py" output="screen" />
+	<!-- <node name="master" pkg="pepper_object_detection" type="test_master_node.py" output="screen" /> -->
     <rosparam file="$(find pepper_object_detection)/config/default.yaml" />
 </launch>

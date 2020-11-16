@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import os
 import rospy
@@ -40,9 +40,8 @@ pepper_say(random.choice(quotes), 100)
 
 
 
-# Move Pepper
-########### TO DO ################
-
+# Pepper muove la testa
+### TO DO ###
 
 
 # Test Detection
@@ -65,6 +64,7 @@ rospy.loginfo('Received Detections from Object Detector')
 image = ros_numpy.numpify(img_msg)
 h,w,_ = image.shape
 
+# TO DO: adattare per vedere più oggetti uguali
 detected_objects = []
 for d in det_msg.detections:
     c = d.results[0].id
@@ -94,7 +94,7 @@ pepper_say(sentence, 100)
 
 ## Show test image
 cv2.imshow('Image', image)
-cv2.waitKey(100)
+cv2.waitKey(0)
 
-
+cv2.destroyAllWindows()
 rospy.loginfo("My job here is done. Shutting down..")

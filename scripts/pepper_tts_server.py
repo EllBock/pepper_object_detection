@@ -8,7 +8,7 @@ from pepper_object_detection.srv import pepper_tts
 class AnimatedSay(NaoqiNode):
 
     def __init__(self):
-        NaoqiNode.__init__(self,'pepper_tts_server_node') # name of the ROS node, not the Aldebaran module
+        NaoqiNode.__init__(self,'tts_server') # name of the ROS node, not the Aldebaran module
         self.connectNaoQi()
         pass
 
