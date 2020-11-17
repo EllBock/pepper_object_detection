@@ -1,3 +1,4 @@
 .vscode/
 detector_node/__pycache__/
 visualization_node/__pycache__/
+src/pepper_object_detection/__pycache__/

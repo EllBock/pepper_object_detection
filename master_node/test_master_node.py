@@ -7,7 +7,7 @@ import ros_numpy
 from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
 import cv2
-from classmap import category_map as classmap
+from pepper_object_detection.classmap import category_map as classmap
 from pepper_object_detection.srv import pepper_tts
 import random
 
