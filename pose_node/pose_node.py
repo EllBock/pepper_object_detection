@@ -4,25 +4,28 @@ import rospy
 from naoqi import ALProxy
 
 
-rospy.init_node('pose_node', disable_signals=True)
-
+rospy.init_node('pose_node')
 
 try:
     postureProxy = ALProxy("ALRobotPosture", rospy.get_param("/tts_server/pip"), 9559)
 except Exception, e:
     s = "Could not create proxy to ALRobotPosture. Error was: {}"
     rospy.logerror(s.format(e))
-    exit() 
+    exit()
+
+
+def shutdown():
+    postureProxy.goToPosture("Crouch", 1.0)
+    rospy.loginfo("Going to sleep..")
+
+
+rospy.on_shutdown(shutdown)
 
 rospy.loginfo("Pose Node initialized.")
 postureProxy.goToPosture("StandInit", 1.0)
 rospy.loginfo("Stand Pose reached.")
 
-try:
-    rospy.spin()
-except KeyboardInterrupt:
-    postureProxy.goToPosture("Crouch", 1.0)
-    rospy.loginfo("Going to sleep..")
-    exit()
+rospy.spin()
 
+    
 
