@@ -24,3 +24,7 @@ rosrun pepper_object_detection detector_node
 rosrun pepper_object_detection pepper_tts_server.py
 rosrun pepper_object_detection test_master_node.py
 ```
+
+## Test image
+Test image is a photo by Jonathan Cooper on Unsplash (non-copyrighted images section).
+
