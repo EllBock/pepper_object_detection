@@ -28,3 +28,9 @@ rosrun pepper_object_detection test_master_node.py
 ## Test image
 Test image is a photo by Jonathan Cooper on Unsplash (non-copyrighted images section).
 
+To publish the image on the /testcam/image_raw topic use this command (the publisher node will be called /testcam).
+The command assumes that you are (with you shell) into the directory of this project.
+
+```python
+rosrun image_publisher image_publisher resources/test_image.jpg __name:=testcam
+```
