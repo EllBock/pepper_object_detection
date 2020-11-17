@@ -10,7 +10,7 @@ try:
     postureProxy = ALProxy("ALRobotPosture", rospy.get_param("/tts_server/pip"), 9559)
 except Exception, e:
     s = "Could not create proxy to ALRobotPosture. Error was: {}"
-    rospy.logerror(s.format(e))
+    rospy.logerr(s.format(e))
     exit()
 
 
