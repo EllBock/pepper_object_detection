@@ -10,6 +10,7 @@ class AnimatedSay(NaoqiNode):
     def __init__(self):
         NaoqiNode.__init__(self,'tts_server') # name of the ROS node, not the Aldebaran module
         self.connectNaoQi()
+        self.speech.setLanguage("English")
         pass
 
     def say(self,data):
