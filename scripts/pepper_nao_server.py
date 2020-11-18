@@ -19,7 +19,7 @@ class NaoServer(NaoqiNode):
         rospy.loginfo(req.timeLists)
         try:
             self.mover.setStiffnesses("Head", 1.0)
-            self.mover.angleInterpolation("HeadYaw", angleLists, timeLists, True)
+            self.mover.angleInterpolation("HeadYaw", req.angleLists, req.timeLists, True)
             self.mover.setStiffnesses("Head", 0.0)
             return pepper_moverResponse(True)
         except Exception, e:
