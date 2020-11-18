@@ -15,10 +15,14 @@ class Mover(NaoqiNode):
     def move(self, req):
         rospy.loginfo(req.angleLists)
         rospy.loginfo(req.timeLists)
-        '''self.mover.setStiffnesses("Head", 1.0)
-        motionProxy.angleInterpolation("HeadYaw", angleLists, timeLists, True)
-        motionProxy.setStiffnesses("Head", 0.0)'''
-        return pepper_moverResponse(True) # used to return a value of the type declared in the service definition
+        try:
+            self.mover.setStiffnesses("Head", 1.0)
+            self.mover.angleInterpolation("HeadYaw", angleLists, timeLists, True)
+            self.mover.setStiffnesses("Head", 0.0)
+            return pepper_moverResponse(True)
+        except Exception, e:
+            rospy.logerr("Cannot move head!")
+            return pepper_moverResponse(False)on
 
     def connectNaoQi(self):
         self.mover = self.get_proxy("ALMotion")
