@@ -39,7 +39,7 @@ def detect_objects(imgmsg, timeout=None):
 def move_head(angleLists, timeLists, timeout=None)
     try:
         rospy.wait_for_service('pepper_mover', timeout)
-        mover = rospy.ServiceProxy('pepper_mover', pepper_head_mover)
+        mover = rospy.ServiceProxy('pepper_mover', pepper_mover)
         res = mover(angleLists, timeLists)
         if not res:
             rospy.logerr('Unable complete head movement.')
