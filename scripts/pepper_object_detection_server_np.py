@@ -8,6 +8,7 @@ from pepper_object_detection.classmap import category_map as classmap
 import numpy as np
 import cv2
 from PIL import Image
+from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
 
 
 class PepperObjectDetectorService():
@@ -36,8 +37,8 @@ class PepperObjectDetectorService():
             d.results.append(o)
             message.detections.append(d)
         # Create a response object
-        response = pepper_object_detectionResponse() 
-        response.detections = detections
+        response = pepper_object_detection_npResponse() 
+        response.detections = message
         return response
     
     def stop(self, reason = 'User request'):

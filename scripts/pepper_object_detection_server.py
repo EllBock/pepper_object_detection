@@ -36,7 +36,7 @@ class PepperObjectDetectorService():
             message.detections.append(d)
         # Create a response object
         response = pepper_object_detectionResponse() 
-        response.detections = detections
+        response.detections = message
         return response
     
     def stop(self, reason = 'User request'):
