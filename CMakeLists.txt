@@ -59,6 +59,7 @@ add_service_files(
    pepper_tts.srv
    pepper_object_detection.srv
    pepper_mover.srv
+   pepper_pose.srv
  )
 
 ## Generate actions in the 'action' folder
