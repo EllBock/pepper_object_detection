@@ -58,6 +58,7 @@ add_service_files(
    FILES
    pepper_tts.srv
    pepper_object_detection.srv
+   pepper_object_detection_np.srv
    pepper_mover.srv
  )
 
