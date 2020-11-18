@@ -5,6 +5,7 @@ from pepper_object_detection.srv import pepper_object_detection, pepper_object_d
 from pepper_object_detection.detector import Detector
 import ros_numpy
 from pepper_object_detection.classmap import category_map as classmap
+from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
 
 
 class PepperObjectDetectorService():
@@ -19,13 +20,23 @@ class PepperObjectDetectorService():
         img_np = ros_numpy.numpify(data.img) 
 
         rospy.loginfo('Object detection server computing predictions...')
-        predictions = self._detection_model(img_np)
+        detections = self._detection_model(img_np)
         rospy.loginfo('Predictions computed!')
+        message = Detection2DArray()
+        for clabel,score,box in zip(detections['detection_classes'], detections['detection_scores'], detections['detection_boxes']):
+            d = Detection2D()
+            d.bbox.size_x = box[3]-box[1]
+            d.bbox.size_y = box[2]-box[0]
+            d.bbox.center.x = box[1]+d.bbox.size_x/2
+            d.bbox.center.y = box[0]+d.bbox.size_y/2
+            o = ObjectHypothesisWithPose()
+            o.score = score
+            o.id = clabel
+            d.results.append(o)
+            message.detections.append(d)
         # Create a response object
         response = pepper_object_detectionResponse() 
-        # Populate it with detected classes
-        for detected_class in predictions['detection_classes']:
-            response.result.append(classmap[detected_class])
+        response.detections = detections
         return response
     
     def stop(self, reason = 'User request'):

@@ -21,20 +21,23 @@ class PepperObjectDetectorService():
         rospy.loginfo('Object detection server (np) computing predictions...')
         img_array = np.frombuffer(data.img, dtype=np.uint8)
         rcvd_img = img_array.reshape((4753, 3395, 3))
-        # DEBUG
-        #window = cv2.namedWindow('rcvd_img', cv2.WINDOW_GUI_NORMAL)
-        #cv2.resizeWindow('rcvd_img', 600,600)
-        #cv2.imshow('rcvd_img', rcvd_img)
-        #cv2.waitKey(0)
-        #cv2.destroyAllWindows()
-        # END DEBUG
-        predictions = self._detection_model(rcvd_img)
+        detections = self._detection_model(rcvd_img)
         rospy.loginfo('Predictions computed!')
+        message = Detection2DArray()
+        for clabel,score,box in zip(detections['detection_classes'], detections['detection_scores'], detections['detection_boxes']):
+            d = Detection2D()
+            d.bbox.size_x = box[3]-box[1]
+            d.bbox.size_y = box[2]-box[0]
+            d.bbox.center.x = box[1]+d.bbox.size_x/2
+            d.bbox.center.y = box[0]+d.bbox.size_y/2
+            o = ObjectHypothesisWithPose()
+            o.score = score
+            o.id = clabel
+            d.results.append(o)
+            message.detections.append(d)
         # Create a response object
-        response = pepper_object_detection_npResponse() 
-        # Populate it with detected classes
-        for detected_class in predictions['detection_classes']:
-            response.result.append(classmap[detected_class])
+        response = pepper_object_detectionResponse() 
+        response.detections = detections
         return response
     
     def stop(self, reason = 'User request'):
