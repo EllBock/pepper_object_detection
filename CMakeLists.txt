@@ -60,6 +60,7 @@ add_service_files(
    pepper_object_detection.srv
    pepper_head_mover.srv
    pepper_pose.srv
+   pepper_object_detection_np.srv
  )
 
 ## Generate actions in the 'action' folder

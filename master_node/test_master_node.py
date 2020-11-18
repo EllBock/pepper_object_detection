@@ -58,7 +58,7 @@ def objects_sentence(objects: dict, separator=", "):
             o = k + "s"
         else
             o = k
-        sentence = sentence + f"{n} {o}" + separator
+        sentence = sentence + f" {n} {o}" + separator
 
     return sentence[:-len(separator)] 
 
@@ -73,10 +73,10 @@ rospy.init_node('test_master_node')
 # Test TTS
 quotes = ["winter is coming", "look, a three headed monkey", 
           "to be, or not to be, that is the question", 
-          "i am the senate", "okay google, phone home", "hello world", 
+          "i am the senate", "okay google, phone home", "hello world", "alexa, make me a sandwich", 
           "how much wood would a woodchuck chuck if a woodchuck could chuck wood?",
           "never gonna give you up, never gonna let you down",
-          "the cake is a lie"]
+          "the cake is a lie", "hi pepper 1, i'm pepper 2"]
 pepper_say(random.choice(quotes), 100)
 
 
