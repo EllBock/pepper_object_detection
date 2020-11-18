@@ -22,7 +22,7 @@ def pepper_say(sentence, timeout=None):
     except rospy.ServiceException as e:
         rospy.logerr("TTS Service call failed: %s"%e)
     except rospy.ROSException as e:
-        rospy.logwarn("TTS Server request timeout.")
+        rospy.logwarn("TTS Service request timeout.")
 
 
 def detect_objects(imgmsg, timeout=None):
@@ -33,34 +33,38 @@ def detect_objects(imgmsg, timeout=None):
     except rospy.ServiceException as e:
         rospy.logerr("Object Detection call failed: %s"%e)
     except rospy.ROSException as e:
-        rospy.logwarn("Object Detection Server request timeout.")
+        rospy.logwarn("Object Detection Service request timeout.")
 
 
-def move_head(angleLists, timeLists, timeout=None)
+def move_head(angleLists, timeLists, timeout=None):
     try:
-        rospy.wait_for_service('pepper_mover', timeout)
-        mover = rospy.ServiceProxy('pepper_mover', pepper_mover)
+        rospy.wait_for_service('pepper_head_mover', timeout)
+        mover = rospy.ServiceProxy('pepper_head_mover', pepper_mover)
         res = mover(angleLists, timeLists)
         if not res:
-            rospy.logerr('Unable complete head movement.')
+            rospy.logerr('Unable to complete head movement.')
     except rospy.ServiceException as e:
         rospy.logerr("Move Head call failed: %s"%e)
     except rospy.ROSException as e:
-        rospy.logwarn("Head Mover Server request timeout.")
+        rospy.logwarn("Head Mover Service request timeout.")
 
 
 def objects_sentence(objects: dict, separator=", "):
+    if len(objects) == 0:
+        return "nothing"
+
     sentence = ""
-    keys = random.shuffle(list(objects))
+    keys = list(objects.keys())
+    random.shuffle(keys)
     for k in keys:
         n = objects[k]
         if n > 1:
             o = k + "s"
-        else
+        else:
             o = k
         sentence = sentence + f" {n} {o}" + separator
 
-    return sentence[:-len(separator)] 
+    return sentence[1:-len(separator)] 
 
 
 
@@ -83,12 +87,13 @@ pepper_say(random.choice(quotes), 100)
 
 # Image acquisition
 img_msgs = []
-move_head(1.5, 1.5)
+move_head([0.9], [1.5])
 img_msgs.append(rospy.wait_for_message(pepper_cam_topic, Image))
-move_head(0.0, 1.5)
+move_head([0.0], [1.5])
 img_msgs.append(rospy.wait_for_message(pepper_cam_topic, Image))
-move_head(-1.5, 0.0)
+move_head([-0.9], [1.5])
 img_msgs.append(rospy.wait_for_message(pepper_cam_topic, Image))
+move_head([0.0], [1.5])
 
 
 # Object Detection
@@ -99,13 +104,14 @@ for i in range(len(img_msgs)):
 
 ## Showing the test images
 detections = []
+images = []
 
-for i in range(len(img_msg)):
-    image = ros_numpy.numpify(img_msgs[i]))
+for i in range(len(img_msgs)):
+    images.append(ros_numpy.numpify(img_msgs[i]))
     detected_objects = {}
-    h,w,_ = image.shape
+    h,w,_ = images[i].shape
 
-    for d in det_msg.detections:
+    for d in det_msgs[i].detections:
         c = d.results[0].id
         s = d.results[0].score
         b = [d.bbox.center.y,d.bbox.center.x,d.bbox.size_y, d.bbox.size_x]
@@ -115,9 +121,9 @@ for i in range(len(img_msg)):
         p2 = (int((b[3]+b[1])*w+.5), int((b[2]+b[0])*h+.5))
         rospy.loginfo(p1, p2, c, classmap[c], s)
         col = (255,0,0) 
-        cv2.rectangle(image, p1, p2, col, 3 )
+        cv2.rectangle(images[i], p1, p2, col, 3 )
         p1 = (p1[0]-10, p1[1])
-        cv2.putText(image, "%s %.2f" % (classmap[c],s), p1, cv2.FONT_HERSHEY_SIMPLEX, 0.8, col, 2)
+        cv2.putText(images[i], "%s %.2f" % (classmap[c],s), p1, cv2.FONT_HERSHEY_SIMPLEX, 0.8, col, 2)
         if classmap[c] in detected_objects:
             detected_objects[classmap[c]] += 1
         else:
@@ -127,15 +133,16 @@ for i in range(len(img_msg)):
 
 
 ## Pepper says the list of objects
-sentence = "on the left i see" + objects_sentence(detections[0]) + "."
-sentence = sentence + " in the middle i see" + objects_sentence(detections[1]) + "."
-sentence = sentence + " on the right i see" + objects_sentence(detections[2]) + "."
+sentence = "on the left i see " + objects_sentence(detections[0]) + "."
+sentence = sentence + " in front of me i see " + objects_sentence(detections[1]) + "."
+sentence = sentence + " on the right i see " + objects_sentence(detections[2]) + "."
 
 rospy.loginfo(f"Sending \"{sentence}\" to TTS Server")
 pepper_say(sentence, 100)
 
 ## Show test image
-cv2.imshow('Image', image)
+for i in range(len(images)):
+    cv2.imshow(f'Image {i}', images[i])
 cv2.waitKey(0)
 
 cv2.destroyAllWindows()
