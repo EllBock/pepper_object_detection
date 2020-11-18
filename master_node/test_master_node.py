@@ -8,7 +8,7 @@ from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
 import cv2
 from pepper_object_detection.classmap import category_map as classmap
-from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_head_mover
+from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_mover
 import random
 
 
