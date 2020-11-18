@@ -22,7 +22,7 @@ class Mover(NaoqiNode):
             return pepper_moverResponse(True)
         except Exception, e:
             rospy.logerr("Cannot move head!")
-            return pepper_moverResponse(False)on
+            return pepper_moverResponse(False)
 
     def connectNaoQi(self):
         self.mover = self.get_proxy("ALMotion")
