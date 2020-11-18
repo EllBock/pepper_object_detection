@@ -8,4 +8,4 @@ detector_path: /home/mivia/gruppo2_ws/src/efficientdet_d1_coco17_tpu-32 # path u
 # In this case the node name is tts_server, because here to "fully qualify" the name you need to use as node name the one that you provided in the .launch file with the 
 # "name" attribute of the <node> tag, and the reference node is obviously pepper_tts_server.py, because it's the one that creates the NaoqiNode object. 
 # The parameter name is instead pip, as you can see in the source file.
-/tts_server/pip: '10.0.1.230' 
+/nao_server/pip: '10.0.1.230' 

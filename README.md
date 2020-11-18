@@ -21,7 +21,7 @@ roslaunch pepper_bringup pepper_full_py.launch nao_ip:=10.0.1.230
 rosparam load $(find pepper_object_detection)/config/default.yaml
 rosrun pepper_object_detection pose_node.py
 rosrun pepper_object_detection detector_node
-rosrun pepper_object_detection pepper_tts_server.py
+rosrun pepper_object_detection pepper_nao_server.py
 rosrun pepper_object_detection test_master_node.py
 ```
 
