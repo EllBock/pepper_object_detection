@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from pepper_object_detection.srv import pepper_tts, pepper_mover, pepper_pose
+from pepper_object_detection.srv import pepper_tts, pepper_head_mover, pepper_pose
 import rospy
 
 # Test TTS
@@ -12,7 +12,7 @@ print('[test] pepper_tts_server_result: {}'.format(res.result)) # res.result con
 
 # Test Mover
 
-mover = rospy.ServiceProxy('pepper_mover', pepper_mover)
+mover = rospy.ServiceProxy('pepper_head_mover', pepper_head_mover)
 print('[test] pepper_mover_initialized')
 res = mover([1.0], [2.0])
 print('[test] pepper_tts_server_result: {}'.format(res.result))

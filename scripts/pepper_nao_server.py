@@ -2,7 +2,7 @@
 # NOTE: must be python and not python3 since naoqi works with python 2.7
 import rospy
 from naoqi_driver.naoqi_node import NaoqiNode
-from pepper_object_detection.srv import pepper_mover, pepper_moverResponse, pepper_tts, pepper_ttsResponse, pepper_pose, pepper_poseResponse
+from pepper_object_detection.srv import pepper_head_mover, pepper_head_moverResponse, pepper_tts, pepper_ttsResponse, pepper_pose, pepper_poseResponse
 
 
 class NaoServer(NaoqiNode):
@@ -14,17 +14,15 @@ class NaoServer(NaoqiNode):
         pass
 
 
-    def move(self, req):
+    def moveHead(self, req):
         rospy.loginfo(req.angleLists)
         rospy.loginfo(req.timeLists)
         try:
-            self.mover.setStiffnesses("Head", 1.0)
             self.mover.angleInterpolation("HeadYaw", req.angleLists, req.timeLists, True)
-            self.mover.setStiffnesses("Head", 0.0)
-            return pepper_moverResponse(True)
+            return pepper_head_moverResponse(True)
         except Exception, e:
             rospy.logerr("Cannot move head!")
-            return pepper_moverResponse(False)
+            return pepper_head_moverResponse(False)
 
 
     def say(self,data):
@@ -66,7 +64,7 @@ class NaoServer(NaoqiNode):
             s = "Could not create proxy to ALRobotPosture. Error was: {}"
             rospy.logerr(s.format(e))
 
-        self.m = rospy.Service('pepper_mover', pepper_mover, self.move)
+        self.m = rospy.Service('pepper_head_mover', pepper_head_mover, self.moveHead)
         self.s = rospy.Service('pepper_tts', pepper_tts, self.say)
         self.p = rospy.Service('pepper_pose', pepper_pose, self.get_pose)
 
