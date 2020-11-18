@@ -48,25 +48,26 @@ class NaoServer(NaoqiNode):
     def connectNaoQi(self):
         try:
             self.mover = self.get_proxy("ALMotion")
+            self.m = rospy.Service('pepper_head_mover', pepper_head_mover, self.moveHead)
         except Exception, e:
             s = "Could not create proxy to ALMotion. Error was: {}"
             rospy.logerr(s.format(e))
 
         try:
             self.speech = self.get_proxy("ALTextToSpeech")
+            self.s = rospy.Service('pepper_tts', pepper_tts, self.say)
         except Exception, e:
             s = "Could not create proxy to ALTextToSpeech. Error was: {}"
             rospy.logerr(s.format(e))
 
         try:
             self.posture = self.get_proxy("ALRobotPosture")
+            self.p = rospy.Service('pepper_pose', pepper_pose, self.get_pose)
         except Exception, e:
             s = "Could not create proxy to ALRobotPosture. Error was: {}"
             rospy.logerr(s.format(e))
 
-        self.m = rospy.Service('pepper_head_mover', pepper_head_mover, self.moveHead)
-        self.s = rospy.Service('pepper_tts', pepper_tts, self.say)
-        self.p = rospy.Service('pepper_pose', pepper_pose, self.get_pose)
+
 
 
 if __name__=="__main__":
