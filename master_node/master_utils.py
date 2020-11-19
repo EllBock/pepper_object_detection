@@ -1,6 +1,6 @@
 import rospy
 import random
-from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_mover
+from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_head_mover
 
 def pepper_say(sentence, timeout=None):
     try:
@@ -29,7 +29,7 @@ def detect_objects(imgmsg, timeout=None):
 def move_head(angleLists, timeLists, timeout=None):
     try:
         rospy.wait_for_service('pepper_head_mover', timeout)
-        mover = rospy.ServiceProxy('pepper_head_mover', pepper_mover)
+        mover = rospy.ServiceProxy('pepper_head_mover', pepper_head_mover)
         res = mover(angleLists, timeLists)
         if not res:
             rospy.logerr('Unable to complete head movement.')

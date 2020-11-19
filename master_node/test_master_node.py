@@ -7,7 +7,7 @@ from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
 import cv2
 from pepper_object_detection.classmap import category_map as classmap
-from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_mover
+from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_head_mover
 import random
 from master_utils import pepper_say, objects_sentence, detect_objects, move_head
 
@@ -62,7 +62,7 @@ for i in range(len(img_msgs)):
         b[1]-=b[3]/2
         p1 = (int(b[1]*w+.5), int(b[0]*h+.5))
         p2 = (int((b[3]+b[1])*w+.5), int((b[2]+b[0])*h+.5))
-        rospy.loginfo(p1, p2, c, classmap[c], s)
+        rospy.loginfo(f"Found {classmap[c]}: {p1}, {p2}; score {s}")
         col = (255,0,0) 
         cv2.rectangle(images[i], p1, p2, col, 3 )
         p1 = (p1[0]-10, p1[1])
