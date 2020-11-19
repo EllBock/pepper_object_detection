@@ -16,7 +16,7 @@ from master_utils import pepper_say, objects_sentence, detect_objects, move_head
 pepper_cam_topic = rospy.get_param('pepper_cam_topic')
 input_image_topic = rospy.get_param('input_image_topic')
 detection_topic = rospy.get_param('detection_topic')
-rospy.init_node('test_master_node')
+rospy.init_node('master_node')
 
 # Test TTS
 quotes = ["winter is coming", "look, a three headed monkey", 
