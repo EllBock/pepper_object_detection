@@ -6,6 +6,7 @@ from pepper_object_detection.detector import Detector
 import ros_numpy
 from pepper_object_detection.classmap import category_map as classmap
 from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
+import logging
 
 
 class PepperObjectDetectorService():
@@ -47,6 +48,7 @@ class PepperObjectDetectorService():
 
 if __name__ == '__main__':
     rospy.init_node('object_detection_server')
+    logging.getLogger('tensorflow').setLevel(logging.FATAL)
     detector_service = PepperObjectDetectorService(rospy.get_param('detector_path')+'/saved_model')
     # Register callback to shut down service when the server node is stopped 
     rospy.on_shutdown(detector_service.stop)

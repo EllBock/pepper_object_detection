@@ -5,6 +5,7 @@ import numpy as np
 
 class Detector():
     def __init__(self,model_path):
+        print('Trying to load model from ', model_path)
         self.detect_fn = tf.saved_model.load(model_path)
 
     def __call__(self, img, threshold=0.5):
