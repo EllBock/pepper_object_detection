@@ -10,7 +10,7 @@ from pepper_object_detection.classmap import category_map as classmap
 from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_head_mover
 import random
 from master_utils import pepper_say, objects_sentence, detect_objects, move_head
-from stitcher import stitch
+from pepper_object_detection.stitcher import stitch
 from cv_bridge import CvBridge
 
 # Init

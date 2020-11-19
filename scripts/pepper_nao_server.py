@@ -27,7 +27,7 @@ class NaoServer(NaoqiNode):
 
     def say(self,data):
         rospy.loginfo("START: %s" % data.message)
-        #self.speech.say(data.message)
+        self.speech.say(data.message)
         rospy.loginfo("END: %s" % data.message) # data.message contains the exact string received
         # rospy.loginfo(data.message) # TEST
         return pepper_ttsResponse(True) # used to return a value of the type declared in the service definition
