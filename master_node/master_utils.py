@@ -26,11 +26,11 @@ def detect_objects(imgmsg, timeout=None):
         rospy.logwarn("Object Detection Service request timeout.")
 
 
-def move_head(angleLists, timeLists, timeout=None):
+def move_head(axis, angleLists, timeLists, timeout=None):
     try:
         rospy.wait_for_service('pepper_head_mover', timeout)
         mover = rospy.ServiceProxy('pepper_head_mover', pepper_head_mover)
-        res = mover(angleLists, timeLists)
+        res = mover(axis, angleLists, timeLists)
         if not res:
             rospy.logerr('Unable to complete head movement.')
     except rospy.ServiceException as e:
