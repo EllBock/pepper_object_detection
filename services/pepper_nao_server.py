@@ -18,7 +18,7 @@ class NaoServer(NaoqiNode):
         rospy.loginfo(req.angleLists)
         rospy.loginfo(req.timeLists)
         try:
-            self.mover.angleInterpolation("HeadYaw", req.angleLists, req.timeLists, True)
+            self.mover.angleInterpolation(req.axis, req.angleLists, req.timeLists, True)
             return pepper_head_moverResponse(True)
         except Exception, e:
             rospy.logerr("Cannot move head!")

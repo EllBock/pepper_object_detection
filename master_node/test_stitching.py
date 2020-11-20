@@ -10,8 +10,13 @@ from pepper_object_detection.classmap import category_map as classmap
 from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_head_mover
 import random
 from master_utils import pepper_say, objects_sentence, detect_objects, move_head
-from pepper_object_detection.stitcher import stitch
 from cv_bridge import CvBridge
+
+
+def stitch(images):
+    stitcher = cv2.Stitcher_create(cv2.Stitcher_PANORAMA)
+    return stitcher.stitch(images)[1]
+
 
 # Init
 pepper_cam_topic = rospy.get_param('pepper_cam_topic')
@@ -29,7 +34,7 @@ for p in positions:
     angleLists.append(p)
     timeLists = []
     timeLists.append(abs(p - last_position))
-    move_head(angleLists, timeLists, 100)
+    move_head("HeadYaw", angleLists, timeLists, 100)
     last_position = p
     img_msgs.append(rospy.wait_for_message(pepper_cam_topic, Image))
 
@@ -50,7 +55,7 @@ det = detect_objects(pnr_msg, 100)
 
 # Show detections
 h,w,_ = panorama.shape
-pnr_cpy = panorama.deepcopy()
+pnr_cpy = panorama
 for d in det.detections:
     c = d.results[0].id
     s = d.results[0].score
