@@ -111,6 +111,10 @@ for i in range(len(img_msgs)):
 
 panorama = stitch(images)
 
+if DEBUG:
+    cv2.imshow("Panorama", panorama)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 # Object Detection
 bridge = CvBridge()
@@ -165,6 +169,7 @@ if DEBUG:
     panorama = cv2.line(panorama, (center_right_bound, 0), (center_right_bound, h), (0, 255, 0), 2)
     cv2.imshow("Panorama", panorama)
     cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 try:
     res = tts_proxy(sentence)
