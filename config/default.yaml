@@ -1,7 +1,5 @@
 pepper_cam_topic: /pepper_robot/camera/front/camera/image_raw
-#input_image_topic: /testcam/image_raw
-#detection_topic: /pepper_object_detection/detection
-detector_path: /home/mivia/gruppo2_ws/src/efficientdet_d1_coco17_tpu-32 # path up to the main folder of the model, node automatically navigates to saved_model
+detector_path: /home/mivia/gruppo2_ws/src/efficientdet_d3_coco17_tpu-32 # path up to the main folder of the model, node automatically navigates to saved_model
 # Set Pepper's IP addres. This can be done both here or in the .launch file. 
 # It's a "fully qualified" name since the parameter is private in 
 # /home/mivia/pepper_object_detection_ws/git_packages/naoqi_bridge/naoqi_driver_py/src/naoqi_driver/naoqi_node.py (line 74), so it resolves to /node_name/parameter_name.

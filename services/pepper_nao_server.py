@@ -33,9 +33,9 @@ class NaoServer(NaoqiNode):
         return pepper_ttsResponse(True) # used to return a value of the type declared in the service definition
 
 
-    def get_pose(self, req):
+    def setPose(self, req):
         try:
-            self.posture.goToPosture(req, 1.0)
+            self.posture.goToPosture(req, 0.5) # half the maximum speed (is in [0,1])
             message = "Pepper has reached the {} posture."
             rospy.loginfo(message.format(req))
             return pepper_poseResponse(True)
@@ -62,7 +62,7 @@ class NaoServer(NaoqiNode):
 
         try:
             self.posture = self.get_proxy("ALRobotPosture")
-            self.p = rospy.Service('pepper_pose', pepper_pose, self.get_pose)
+            self.p = rospy.Service('pepper_pose', pepper_pose, self.setPose)
         except Exception, e:
             s = "Could not create proxy to ALRobotPosture. Error was: {}"
             rospy.logerr(s.format(e))

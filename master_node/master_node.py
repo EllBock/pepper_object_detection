@@ -7,7 +7,7 @@ from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
 import cv2
 from pepper_object_detection.classmap import category_map as classmap
-from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_head_mover
+from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_head_mover, pepper_pose
 import random
 from cv_bridge import CvBridge
 
@@ -58,30 +58,47 @@ try:
     rospy.wait_for_service('pepper_object_detection', 500)
     detector_proxy = rospy.ServiceProxy('pepper_object_detection', pepper_object_detection)
     rospy.loginfo("Object Detector OK!")
+    rospy.wait_for_service('pepper_pose', 100)
+    pose_proxy = rospy.ServiceProxy('pepper_pose', pepper_pose)
+    rospy.loginfo("Pepper pose manager OK!")
 except rospy.ROSException as e:
     rospy.logerr("Service connection timeout. Exiting..")
     exit()
 
 rospy.loginfo("Services ready.")
 
+try:
+    res = pose_proxy('StandInit')
+    if not res:
+        i = 0
+        while(not res):
+            rospy.logwarn(f"Could not reach required pose! Trying again ({i+1}) ..")
+            res = pose_proxy('StandInit')
+            i += 1
+            if i > TRIAL_NUMBER_FAILURE:
+                rospy.logerr("Could not reach required pose! Exiting..")
+                exit()
+except rospy.ServiceException as e:
+    rospy.logerr("Go To Posture call failed: %s"%e)
+    exit()
 
 
 # Image acquisition
 img_msgs = []
 # (Axis, Angle (rad), Time (s), Take photo?)
-positions = [("HeadYaw", 0.8, 0.8, False),
-             ("HeadPitch", 0.1, 0.1, True),
-             ("HeadYaw", 0.4, 0.4, True),
-             ("HeadYaw", 0.0, 0.4, True),
-             ("HeadYaw", -0.4, 0.4, True),
-             ("HeadYaw", -0.8, 0.4, True),
-             ("HeadPitch", -0.2, 0.3, True),
-             ("HeadYaw", -0.4, 0.4, True),
-             ("HeadYaw", 0.0, 0.4, True),
-             ("HeadYaw", 0.4, 0.4, True),
-             ("HeadYaw", 0.8, 0.4, True),
+positions = [("HeadYaw", 0.8, 1.6, False),
+             ("HeadPitch", -0.2, 1.2, True),
+             ("HeadYaw", 0.4, 0.8, True),
+             ("HeadYaw", 0.0, 0.8, True),
+             ("HeadYaw", -0.4, 0.8, True),
+             ("HeadYaw", -0.8, 0.8, True),
+             ("HeadPitch", 0.2, 1.2, True),
+             ("HeadYaw", -0.4, 0.8, True),
+             ("HeadYaw", 0.0, 0.8, True),
+             ("HeadYaw", 0.4, 0.8, True),
+             ("HeadYaw", 0.8, 0.8, True),
              ("HeadYaw", 0.0, 0.8, False),
-             ("HeadPitch", 0.0, 0.2, False)]
+             ("HeadPitch", 0.0, 1.2, False)]
 
 for p in positions:
     angleLists = []
@@ -137,7 +154,7 @@ objects = {'sx':{}, 'center':{}, 'dx':{}}
 for d in det.detections:
     c = d.results[0].id
     s = d.results[0].score
-    bbcenter_x = d.bbox.center.x
+    bbcenter_x = d.bbox.center.x * w
     b = [d.bbox.center.y,d.bbox.center.x,d.bbox.size_y, d.bbox.size_x]
     b[0]-=b[2]/2
     b[1]-=b[3]/2
