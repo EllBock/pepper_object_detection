@@ -1,22 +1,39 @@
 #!/usr/bin/python
 # NOTE: must be python and not python3 since naoqi works with python 2.7
+
+'''
+This module has to provide to the other nodes an interface to interact with three
+NAOqi proxies, without forcing the programmer to develop using python2 instead of python3.
+So, this module implements three ROS Services Servers:
+   - pepper_head_mover;
+   - pepper_tts;
+   - pepper_pose.
+'''
+
 import rospy
 from naoqi_driver.naoqi_node import NaoqiNode
 from pepper_object_detection.srv import pepper_head_mover, pepper_head_moverResponse, pepper_tts, pepper_ttsResponse, pepper_pose, pepper_poseResponse
 
+# This NAOqiNode wrapper class manages the three services that implements.
 
 class NaoServer(NaoqiNode):
 
+    # Initialization stuff
     def __init__(self):
-        NaoqiNode.__init__(self,'nao_server') # name of the ROS node, not the Aldebaran module
+        NaoqiNode.__init__(self,'nao_server')
         self.connectNaoQi()
-        #self.speech.setLanguage("English")
+        self.speech.setLanguage("English")
         pass
 
 
     def moveHead(self, req):
-        rospy.loginfo(req.angleLists)
-        rospy.loginfo(req.timeLists)
+        '''
+        This method calls "angleInterpolation" method of the NAOqi proxy named "ALMotion",
+        which interpolates the req.axis (head yaw or head pitch) to req.angleLists radiants
+        in req.timeLists seconds.
+        '''
+        debug_message = 'Respectively, the angles list and the times list recived: {}, {}'
+        rospy.logdebug(debug_message.format(req.angleLists, req.timeLists))
         try:
             self.mover.angleInterpolation(req.axis, req.angleLists, req.timeLists, True)
             return pepper_head_moverResponse(True)
@@ -26,22 +43,29 @@ class NaoServer(NaoqiNode):
 
 
     def say(self,data):
-        rospy.loginfo("START: %s" % data.message)
+        '''
+        This method calls the "say" method of the NAOqi proxy named "ALTextToSpeech",
+        which which makes the robot say the data.message received string.
+        '''
         self.speech.say(data.message)
-        rospy.loginfo("END: %s" % data.message) # data.message contains the exact string received
-        # rospy.loginfo(data.message) # TEST
-        return pepper_ttsResponse(True) # used to return a value of the type declared in the service definition
+        debug_message = 'Pepper has said: {}'
+        rospy.logdebug(debug_message.format(data.message))
+        return pepper_ttsResponse(True)
 
 
     def setPose(self, req):
+        '''
+        This method calls the "goToPosture" method of the NAOqi proxy named "ALRobotPosture",
+        which makes the robot go to the req.message posture.
+        '''
         try:
-            self.posture.goToPosture(req, 0.5) # half the maximum speed (is in [0,1])
+            self.posture.goToPosture(req.message, 0.5)
             message = "Pepper has reached the {} posture."
-            rospy.loginfo(message.format(req))
+            rospy.logdebug(message.format(req.message))
             return pepper_poseResponse(True)
         except Exception, e:
             message = "Pepper has not reached the {} posture."
-            rospy.loginfo(message.format(req))
+            rospy.logerr(message.format(req.message))
             return pepper_poseResponse(False)
 
 
@@ -68,9 +92,11 @@ class NaoServer(NaoqiNode):
             rospy.logerr(s.format(e))
 
 
-
-
 if __name__=="__main__":
     pub = NaoServer()
-    rospy.loginfo('NaoServer initialized')
+    rospy.logdebug('NaoServer initialized')
+    '''
+    Need to spin, otherwise the reference to the services would be lost, and the server
+    would be unable to serve requests (the handler method is a member of the class)
+    '''
     rospy.spin()
