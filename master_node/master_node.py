@@ -88,8 +88,8 @@ for p in positions:
     angleLists.append(p[1])
     timeLists = []
     timeLists.append(p[2])
-    res = head_mover_proxy(p[0], angleLists, timeLists)
     try:
+        res = head_mover_proxy(p[0], angleLists, timeLists)
         if not res:
             i = 0
             while(not res):
