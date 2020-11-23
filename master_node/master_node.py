@@ -89,16 +89,19 @@ for p in positions:
     timeLists = []
     timeLists.append(p[2])
     res = head_mover_proxy(p[0], angleLists, timeLists)
-
-    if not res:
-        i = 0
-        while(not res):
-            rospy.logwarn(f"Could not move head! Trying again ({i+1}) ..")
-            res = head_mover_proxy(p[0], angleLists, timeLists)
-            i += 1
-            if i > TRIAL_NUMBER_FAILURE:
-                rospy.logerr("Could not move head! Exiting..")
-                exit()
+    try:
+        if not res:
+            i = 0
+            while(not res):
+                rospy.logwarn(f"Could not move head! Trying again ({i+1}) ..")
+                res = head_mover_proxy(p[0], angleLists, timeLists)
+                i += 1
+                if i > TRIAL_NUMBER_FAILURE:
+                    rospy.logerr("Could not move head! Exiting..")
+                    exit()
+    except rospy.ServiceException as e:
+        rospy.logerr("Move Head call failed: %s"%e)
+        exit()
     
     if p[3]:
         img_msgs.append(rospy.wait_for_message(pepper_cam_topic, Image))
@@ -114,6 +117,7 @@ panorama = stitch(images)
 if DEBUG:
     cv2.imshow("Panorama", panorama)
     cv2.waitKey(0)
+    cv2.imwrite('panorama.jpg', panorama)
     cv2.destroyAllWindows()
 
 # Object Detection
@@ -169,6 +173,7 @@ if DEBUG:
     panorama = cv2.line(panorama, (center_right_bound, 0), (center_right_bound, h), (0, 255, 0), 2)
     cv2.imshow("Panorama", panorama)
     cv2.waitKey(0)
+    cv2.imwrite("panorama_od.jpg", panorama)
     cv2.destroyAllWindows()
 
 try:
@@ -183,6 +188,7 @@ try:
             exit()
 except rospy.ServiceException as e:
     rospy.logerr("TTS Service call failed: %s"%e)
+    exit()
 
 
 
