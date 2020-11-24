@@ -1,6 +1,5 @@
 # Object Detection with Pepper
 
-
 ## Dependencies
 
 * ROS Melodic 
@@ -17,7 +16,7 @@
 
 
 ## Workspace setup **ADD RECOMMENDATION**
-Clone this repo into your ``src`` directory, then build.
+Clone this repo into your ``src`` directory, then build the workspace.
 
 
 ### Object Detection Model
@@ -29,15 +28,17 @@ Download and extract it somewhere. Then, change the ``detector_path`` field in `
 
 ### OpenCV 4
 
-As of now, ROS Melodic (based on Ubuntu 18.04) comes with OpenCV 3.2.0, which unfortunately for us has a [bug](https://github.com/opencv/opencv/issues/6969) in its image stitching module. One of the options is to install OpenCV 4 from PyPI with the [``opencv-python``](https://pypi.org/project/opencv-python/) package. 
+As of now, ROS Melodic (based on Ubuntu 18.04) comes with OpenCV 3.2.0 which, unfortunately for us, has a [bug](https://github.com/opencv/opencv/issues/6969) in its image stitching module. To solve this problem, we opted to install OpenCV 4 from PyPI with the [``opencv-python``](https://pypi.org/project/opencv-python/) package.
 
-If you don't want to install OpenCV 4 system-wide, you can install the ``opencv-python`` package anywhere you want, and then make it visible to our nodes. For example, we usually create a ``dependencies`` directory in the workspace, and downloaad the package there.
+*Any **system-wide** installation of OpenCV 4 should be fine for our intents and purposes.*
+
+But, if you don't want to install OpenCV 4 system-wide, you can install ``opencv-python`` with ``pip3`` in a directory of your choice. For example, we usually create a ``dependencies`` directory in our workspace, and downloaad the package there.
 ```
 $ mkdir dependencies
 $ cd dependencies
 $ pip3 install --target=. opencv-python
 ```
-Then, we make this directory visible to our nodes by changing the ``dependencies_path`` field in ``src/pepper_object_detection/config/default.yaml`` to the ``dependencies`` directory. If you have a system-wide installation of OpenCV 4, this field should remain empty (``""``).
+Then, to make this directory visible to our nodes, we change the ``dependencies_path`` field in ``src/pepper_object_detection/config/default.yaml`` to the ``dependencies`` directory. This field should be empty (``""``) otherwise.
 
 
 ## Usage
@@ -46,14 +47,17 @@ Run everything in one line with our pre-configured launch file
 ```
 $ roslaunch pepper_object_detection pepper_object_detection.launch pepper_ip:=<YOUR_ROBOT_IP>
 ```
-or, if you want to test each node separately, run the following in separate terminal windows
+or, if you want to test each node separately, load the configuration with
+```
+$ rosparam load src/pepper_object_detection/config/default.yaml
+```
+then run each of the following lines in separate terminal windows
 
 ```
-rosparam load src/pepper_object_detection/config/default.yaml
-roslaunch pepper_bringup pepper_full_py.launch nao_ip:=10.0.1.230
-rosrun pepper_object_detection pepper_nao_server.py
-rosrun pepper_object_detection pepper_object_detection_server.py
-rosrun pepper_object_detection master_node.py
+$ roslaunch pepper_bringup pepper_full_py.launch nao_ip:=10.0.1.230
+$ rosrun pepper_object_detection pepper_nao_server.py
+$ rosrun pepper_object_detection pepper_object_detection_server.py
+$ rosrun pepper_object_detection master_node.py
 ```
 
 # OLD PLEASE DELETE
