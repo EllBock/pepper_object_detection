@@ -19,7 +19,7 @@ cv2_dir = rospy.get_param('dependencies_path')
 rospy.init_node('master_node')
 
 if cv2_dir != "":
-    sys.path.insert(cv2_dir)
+    sys.path.insert(0, cv2_dir)
 
 import cv2
 
@@ -69,25 +69,35 @@ def objects_sentence(objects: dict, separator=", "):
 
 
 # Aspettiamo che tutti i servizi necessari siano online
-rospy.loginfo("Waiting for services...")
 try:
-    rospy.wait_for_service('pepper_tts', 100)
+    rospy.loginfo("Waiting for TTS service...")
+    rospy.wait_for_service('pepper_tts', 20)
     tts_proxy = rospy.ServiceProxy('pepper_tts', pepper_tts)
-    rospy.loginfo("TTS OK")
-    rospy.wait_for_service('pepper_head_mover', 100)
+    rospy.loginfo("TTS service OK")
+
+    rospy.loginfo("Waiting for Head Movement service...")
+    rospy.wait_for_service('pepper_head_mover', 20)
     head_mover_proxy = rospy.ServiceProxy('pepper_head_mover', pepper_head_mover)
-    rospy.loginfo("Head Movement OK!")
-    rospy.wait_for_service('pepper_object_detection', 500)
-    detector_proxy = rospy.ServiceProxy('pepper_object_detection', pepper_object_detection)
-    rospy.loginfo("Object Detector OK!")
-    rospy.wait_for_service('pepper_pose', 100)
+    rospy.loginfo("Head Movement service OK")
+
+    rospy.loginfo("Waiting for Pose service...")
+    rospy.wait_for_service('pepper_pose', 20)
     pose_proxy = rospy.ServiceProxy('pepper_pose', pepper_pose)
-    rospy.loginfo("Pepper pose manager OK!")
+    rospy.loginfo("Pose service OK")
+
+    rospy.loginfo("Testing Camera input...")
+    rospy.wait_for_message(pepper_cam_topic, Image, 20)
+    rospy.loginfo("Camera topic OK")
+
+    rospy.loginfo("Waiting for Object Detection service...")
+    rospy.wait_for_service('pepper_object_detection', 200)
+    detector_proxy = rospy.ServiceProxy('pepper_object_detection', pepper_object_detection)
+    rospy.loginfo("Object Detector service OK")
+
 except rospy.ROSException as e:
-    rospy.logerr("Service connection timeout. Exiting..")
+    rospy.logerr("Request timeout. Exiting..")
     exit()
 
-rospy.loginfo("Services ready.")
 
 
 # Portiamo il robot in una posizione neutra
@@ -106,6 +116,7 @@ except rospy.ServiceException as e:
     rospy.logerr("Go To Posture call failed: %s"%e)
     exit()
 
+rospy.loginfo("Setup completed.")
 
 # Acquisizione delle immagini
 img_msgs = []
@@ -145,6 +156,7 @@ positions = [("HeadPitch", -0.2, 1.2, False),
 
 # Eseguiamo i movimenti richiesti, salvando l'immagine pubblicata sul topic
 # della camera del robot quando il flag è True.
+rospy.loginfo("Scanning the area...")
 for p in positions:
     angleLists = []
     angleLists.append(p[1])
@@ -166,7 +178,11 @@ for p in positions:
         exit()
     
     if p[3]:
-        img_msgs.append(rospy.wait_for_message(pepper_cam_topic, Image))
+        try:
+            img_msgs.append(rospy.wait_for_message(pepper_cam_topic, Image, 10))
+        except rospy.ROSException as e:
+            rospy.logerr("Camera input timeout. Exiting...")
+            exit() 
 
 
 # Eseguiamo lo stitching delle immagini
@@ -192,6 +208,7 @@ if DEBUG:
 
 
 # Generiamo un messaggio Image
+rospy.loginfo("Detecting objects...")
 bridge = CvBridge()
 pnr_msg = bridge.cv2_to_imgmsg(panorama)
 
@@ -252,6 +269,7 @@ sentence = sentence + " in front of me, i see " + objects_sentence(objects['cent
 sentence = sentence + " on the right, i see " + objects_sentence(objects['dx']) + ";"
 
 # Il robot parla
+rospy.loginfo(f"TTS: {sentence}")
 try:
     res = tts_proxy(sentence)
     i = 0
@@ -277,4 +295,4 @@ if DEBUG:
     cv2.destroyAllWindows()
 
 
-rospy.loginfo("Task completed. Closing..")
+rospy.loginfo("Task completed. Closing...")
