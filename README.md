@@ -38,7 +38,7 @@ $ mkdir dependencies
 $ cd dependencies
 $ pip3 install --target=. opencv-python
 ```
-Then, to make this directory visible to our nodes, we change the ``dependencies_path`` field in ``src/pepper_object_detection/config/default.yaml`` to the ``dependencies`` directory. This field should be empty (``""``) otherwise.
+Then, to make this directory visible to our nodes, we change the ``dependencies_path`` field in ``src/pepper_object_detection/config/default.yaml`` to the ``dependencies`` directory. This field should be empty otherwise.
 
 
 ## Usage
@@ -50,11 +50,12 @@ $ roslaunch pepper_object_detection pepper_object_detection.launch pepper_ip:=<Y
 or, if you want to test each node separately, load the configuration with
 ```
 $ rosparam load src/pepper_object_detection/config/default.yaml
+$ rosparam set /nao_server/pip "<YOUR_ROBOT_IP>"
 ```
 then run each of the following lines in separate terminal windows
 
 ```
-$ roslaunch pepper_bringup pepper_full_py.launch nao_ip:=10.0.1.230
+$ roslaunch pepper_bringup pepper_full_py.launch nao_ip:=<YOUR_ROBOT_IP>
 $ rosrun pepper_object_detection pepper_nao_server.py
 $ rosrun pepper_object_detection pepper_object_detection_server.py
 $ rosrun pepper_object_detection master_node.py
