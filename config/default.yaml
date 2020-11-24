@@ -7,4 +7,4 @@ dependencies_path: /home/mivia/gruppo2_ws/dependencies
 # In this case the node name is tts_server, because here to "fully qualify" the name you need to use as node name the one that you provided in the .launch file with the 
 # "name" attribute of the <node> tag, and the reference node is obviously pepper_tts_server.py, because it's the one that creates the NaoqiNode object. 
 # The parameter name is instead pip, as you can see in the source file.
-/nao_server/pip: '10.0.1.230' 
+#/nao_server/pip: '10.0.1.230' --> moved to launch file

@@ -1,8 +1,14 @@
 <launch>
-	<rosparam file="$(find pepper_object_detection)/config/default.yaml" />
+	<arg name="pepper_ip" default="10.0.1.230" />
 
+	<!-- Load parameters on parameter server -->
+	<rosparam file="$(find pepper_object_detection)/config/default.yaml" />
+	<!-- Load Pepper ip for custom NaoQiNode-s on parameter server -->
+	<rosparam param="/nao_server/pip" subst_value="True">$(arg pepper_ip)</rosparam>
+
+	<!-- Launch pepper_bringup to have Pepper-related functionalities available in ROS, passing the correct ip -->
 	<include file="$(find pepper_bringup)/launch/pepper_full_py.launch">
-		<arg name='nao_ip' value='0.0.0.0' />
+		<arg name='nao_ip' value="$(arg pepper_ip)" />
 	</include>	
 
 	<node name="nao_server" pkg="pepper_object_detection" type="pepper_nao_server.py" output="screen" />
