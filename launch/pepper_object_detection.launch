@@ -1,5 +1,10 @@
 <launch>
 	<rosparam file="$(find pepper_object_detection)/config/default.yaml" />
+
+	<include file="$(find pepper_bringup)/launch/pepper_full_py.launch">
+		<arg name='nao_ip' value='0.0.0.0' />
+	</include>	
+
 	<node name="nao_server" pkg="pepper_object_detection" type="pepper_nao_server.py" output="screen" />
 	<!-- Set Pepper's IP address. Definition is in /home/mivia/pepper_object_detection_ws/git_packages/naoqi_bridge/naoqi_driver_py/src/naoqi_driver/naoqi_node.py at line 74/80. -->
 	<!-- param name="pip" value="0.0.0.1" /> -->
