@@ -1,6 +1,62 @@
 # Object Detection with Pepper
 
-## Workspace setup
+
+## Dependencies
+
+* ROS Melodic 
+* OpenCV 4
+* TensorFlow >= 2
+* [rospkg](https://wiki.ros.org/rospkg) 
+* A correctly set-up workspace with
+  * NaoQI SDK
+  * from the [ros-naoqi](https://github.com/ros-naoqi) repos
+    * [pepper_robot](https://github.com/ros-naoqi/pepper_robot)
+    * [naoqi_bridge](https://github.com/ros-naoqi/naoqi_bridge)
+    * [naoqi_bridge_msgs](https://github.com/ros-naoqi/naoqi_bridge_msgs)
+  * [vision_msgs](https://github.com/Kukanani/vision_msgs)
+
+
+## Workspace setup **ADD RECOMMENDATION**
+Clone this repo into your ``src`` directory, then build.
+
+
+### Object Detection Model
+
+Choose a model from the [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md). We recommend **RECOMMENDATION HERE**. 
+
+Download and extract it somewhere. Then, change the ``detector_path`` field in ``src/pepper_object_detection/config/default.yaml`` with the model's path.
+
+
+### OpenCV 4
+
+As of now, ROS Melodic (based on Ubuntu 18.04) comes with OpenCV 3.2.0, which unfortunately for us has a [bug](https://github.com/opencv/opencv/issues/6969) in its image stitching module. One of the options is to install OpenCV 4 from PyPI with the [``opencv-python``](https://pypi.org/project/opencv-python/) package. 
+
+If you don't want to install OpenCV 4 system-wide, you can install the ``opencv-python`` package anywhere you want, and then make it visible to our nodes. For example, we usually create a ``dependencies`` directory in the workspace, and downloaad the package there.
+```
+$ mkdir dependencies
+$ cd dependencies
+$ pip3 install --target=. opencv-python
+```
+Then, we make this directory visible to our nodes by changing the ``dependencies_path`` field in ``src/pepper_object_detection/config/default.yaml`` to the ``dependencies`` directory. If you have a system-wide installation of OpenCV 4, this field should remain empty (``""``).
+
+
+## Usage
+
+Run everything in one line with our pre-configured launch file
+```
+$ roslaunch pepper_object_detection pepper_object_detection.launch pepper_ip:=<YOUR_ROBOT_IP>
+```
+or, if you want to test each node separately, run the following in separate terminal windows
+
+```
+rosparam load src/pepper_object_detection/config/default.yaml
+roslaunch pepper_bringup pepper_full_py.launch nao_ip:=10.0.1.230
+rosrun pepper_object_detection pepper_nao_server.py
+rosrun pepper_object_detection pepper_object_detection_server.py
+rosrun pepper_object_detection master_node.py
+```
+
+# OLD PLEASE DELETE
 
 1. Clone this package and into your ros workspace ``src`` folder.
 2. Download and extract an object detection model from the [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md).
