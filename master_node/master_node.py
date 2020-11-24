@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
+import sys
 import rospy
 import ros_numpy
 from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
-import cv2
 from pepper_object_detection.classmap import category_map as classmap
 from pepper_object_detection.srv import pepper_tts, pepper_object_detection, pepper_head_mover, pepper_pose
 import random
@@ -12,6 +12,25 @@ from cv_bridge import CvBridge
 
 TRIAL_NUMBER_FAILURE = 10
 DEBUG = True
+
+# Inizializzazione del nodo ROS
+pepper_cam_topic = rospy.get_param('pepper_cam_topic')
+cv2_dir = rospy.get_param('dependencies_path')
+rospy.init_node('master_node')
+
+if cv2_dir != "":
+    sys.path.insert(cv2_dir)
+
+import cv2
+
+# Lo stitcher non funziona con OpenCV <3.2.0
+cv_version = cv2.__version__.split(".")
+if int(cv_version[0]) < 3 or (int(cv_version[0]) == 3 and int(cv_version[1]) <= 2):
+    rospy.logfatal("OpenCV {cv2.__version__} is not supported. OpenCV > 3.2.0 required. Exiting..")
+    exit()
+elif int(cv_version[0]) < 4:
+    rospy.logwarn("This code has not been tested with OpenCV < 4. Please, beware of unexpected behaviour.")
+
 
 
 # Interfaccia semplificata allo Stitcher di CV2
@@ -47,21 +66,6 @@ def objects_sentence(objects: dict, separator=", "):
 
     return sentence
 
-
-
-
-# Inizializzazione del nodo ROS
-pepper_cam_topic = rospy.get_param('pepper_cam_topic')
-rospy.init_node('master_node')
-
-
-# Lo stitcher non funziona con OpenCV <3.2.0
-cv_version = cv2.__version__.split(".")
-if int(cv_version[0]) < 3 or (int(cv_version[0]) == 3 and int(cv_version[1]) <= 2):
-    rospy.logfatal("OpenCV {cv2.__version__} is not supported. OpenCV > 3.2.0 required. Exiting..")
-    exit()
-elif int(cv_version[0]) < 4:
-    rospy.logwarn("This code has not been tested with OpenCV < 4. Please, beware of unexpected behaviour.")
 
 
 # Aspettiamo che tutti i servizi necessari siano online
