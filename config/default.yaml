@@ -1,10 +1,3 @@
 pepper_cam_topic: /pepper_robot/camera/front/camera/image_raw
-detector_path: /home/mivia/gruppo2_ws/src/efficientdet_d3_coco17_tpu-32 # path up to the main folder of the model, node automatically navigates to saved_model
-dependencies_path: /home/mivia/gruppo2_ws/dependencies
-# Set Pepper's IP addres. This can be done both here or in the .launch file. 
-# It's a "fully qualified" name since the parameter is private in 
-# /home/mivia/pepper_object_detection_ws/git_packages/naoqi_bridge/naoqi_driver_py/src/naoqi_driver/naoqi_node.py (line 74), so it resolves to /node_name/parameter_name.
-# In this case the node name is tts_server, because here to "fully qualify" the name you need to use as node name the one that you provided in the .launch file with the 
-# "name" attribute of the <node> tag, and the reference node is obviously pepper_tts_server.py, because it's the one that creates the NaoqiNode object. 
-# The parameter name is instead pip, as you can see in the source file.
-#/nao_server/pip: '10.0.1.230' --> moved to launch file
+detector_path: <PATH>
+dependencies_path: <PATH>

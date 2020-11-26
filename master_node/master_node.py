@@ -124,7 +124,7 @@ img_msgs = []
 # Definiamo una serie di posizioni assolute che la testa del robot
 # deve assumere.
 # Format: (Axis, Angle (rad), Time (s), Take photo?)
-'''
+
 # 10 immagini, 0.4 di scarto
 positions = [("HeadYaw", 0.8, 1.6, False),
              ("HeadPitch", -0.2, 1.2, True),
@@ -139,20 +139,6 @@ positions = [("HeadYaw", 0.8, 1.6, False),
              ("HeadYaw", 0.8, 0.8, True),
              ("HeadYaw", 0.0, 0.8, False),
              ("HeadPitch", 0.0, 1.2, False)]
-'''
-# 8 immagini, 0.5 di scarto
-positions = [("HeadPitch", -0.2, 1.2, False),
-             ("HeadYaw", 0.25, 0.8, True),
-             ("HeadYaw", 0.75, 0.8, True),
-             ("HeadPitch", 0.2, 1.2, True),
-             ("HeadYaw", 0.25, 0.8, True),
-             ("HeadYaw", -0.25, 0.8, True),
-             ("HeadYaw", -0.75, 0.8, True),
-             ("HeadPitch", -0.2, 0.8, True),
-             ("HeadYaw", -0.25, 0.8, True),
-             ("HeadYaw", 0.0, 0.8, False),
-             ("HeadPitch", 0.0, 1.2, False)]
-
 
 # Eseguiamo i movimenti richiesti, salvando l'immagine pubblicata sul topic
 # della camera del robot quando il flag è True.
@@ -201,11 +187,9 @@ if panorama is None or res != 0:
 
 # Nel caso mostriamo e salviamo una copia del risultato
 if DEBUG:
-    cv2.imshow("Panorama", panorama)
-    cv2.waitKey(0)
+    cv2.imshow("Panorama View", panorama)
+    cv2.waitKey(100)
     cv2.imwrite('panorama.jpg', panorama)
-    cv2.destroyAllWindows()
-
 
 # Generiamo un messaggio Image
 rospy.loginfo("Detecting objects...")
@@ -289,7 +273,7 @@ except rospy.ServiceException as e:
 if DEBUG:
     panorama = cv2.line(panorama, (left_center_bound, 0), (left_center_bound, h), (0, 255, 0), 2)
     panorama = cv2.line(panorama, (center_right_bound, 0), (center_right_bound, h), (0, 255, 0), 2)
-    cv2.imshow("Panorama", panorama)
+    cv2.imshow("Panorama Detection", panorama)
     cv2.waitKey(0)
     cv2.imwrite("panorama_od.jpg", panorama)
     cv2.destroyAllWindows()

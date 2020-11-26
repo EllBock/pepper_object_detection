@@ -59,7 +59,7 @@ class NaoServer(NaoqiNode):
         which makes the robot go to the req.message posture.
         '''
         try:
-            self.posture.goToPosture(req.message, 0.5)
+            self.posture.goToPosture(req.message, 0.1)
             message = "Pepper has reached the {} posture."
             rospy.logdebug(message.format(req.message))
             return pepper_poseResponse(True)
