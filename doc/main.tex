@@ -1,0 +1,93 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{layaureo}
+%Pacchetti per l'italiano
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{csquotes}
+% Pacchetto per eliminare le giunture
+\usepackage{microtype}
+% pacchetto teoremi ecc.
+\usepackage{amsthm}
+% Pacchetto matematica
+\usepackage{amsmath}
+\usepackage{amssymb}
+% Pacchetto per gestire meglio i float (H e box)
+\usepackage{float}
+% pacchetto per aggiungere figure grafiche
+\usepackage{graphicx}
+% Pacchetto per aumentare il limite di float
+\usepackage{morefloats}
+% pacchetto per modificare le caption
+\usepackage{caption}
+% Pacchetto gestione dei hyperlinks
+\usepackage{hyperref}
+%liste in più
+\usepackage{scrextend}
+%liste inline
+\usepackage[inline]{enumitem}
+%autor
+\usepackage{authblk}
+% TO DO
+\usepackage{todonotes}
+\usepackage{verbatim}
+
+\graphicspath{{Images/}}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{calc}
+\usepackage{gensymb} % Aggiunge il simbolo dei gradi
+
+% Bibliografia
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+
+%authblk in Italiano
+\renewcommand\Authand{ e }
+\renewcommand\Authands{ e }
+
+%colora i link
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+}
+
+%Bibliografia
+%\addbibresource{biblio.bib}
+
+% Titolo
+\title{Object detection with Pepper: Gruppo 2}
+\author{Luca Boccia}
+\author{Francesco Chiarello}
+\author{Michele Oliva}
+\affil{\texttt{\{\href{mailto:l.boccia12@studenti.unisa.it}{l.boccia12}, \href{mailto:f.chiarello1@studenti.unisa.it}{f.chiarello1}, \href{mailto:m.oliva26@studenti.unisa.it}{m.oliva26}\}@studenti.unisa.it}}
+\affil{Università degli Studi di Salerno}
+\date{Gennaio 2021}
+
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+%\listoffigures
+
+\section{Introduzione}
+\input{intro.tex}
+
+\section{Descrizione della soluzione}
+\input{soluzione.tex}
+
+\section{Risultati sperimentali}
+\input{risultati.tex}
+
+\section{Conclusioni}
+\input{conclusioni.tex}
+
+
+\printbibliography
+\end{document}

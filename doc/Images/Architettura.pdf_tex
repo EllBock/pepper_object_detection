@@ -1,0 +1,111 @@
+%% Creator: Inkscape 1.0.1 (3bc2e813f5, 2020-09-07), www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'Architettura.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{1101bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.55585831)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{Architettura.pdf}}%
+    \put(0.16008174,0.23297003){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Master Node\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{Architettura.pdf}}%
+    \put(0.13623978,0.43051771){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Response\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{Architettura.pdf}}%
+    \put(0.13623978,0.46457766){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Request\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{Architettura.pdf}}%
+    \put(0.13623978,0.51566757){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Pepper object detection...\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{Architettura.pdf}}%
+    \put(0.05108992,0.30858311){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Image\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{Architettura.pdf}}%
+    \put(0.10694823,0.36239782){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Detections description\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{Architettura.pdf}}%
+    \put(0.70504087,0.25340599){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Nao Server Node\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{Architettura.pdf}}%
+    \put(0.45572207,0.04564033){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Response\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{Architettura.pdf}}%
+    \put(0.45572207,0.07970027){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Request\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{Architettura.pdf}}%
+    \put(0.45572207,0.11376022){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Pepper TTS...\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{Architettura.pdf}}%
+    \put(0.45572207,0.19277929){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Response\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=12]{Architettura.pdf}}%
+    \put(0.45572207,0.22683924){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Request\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=13]{Architettura.pdf}}%
+    \put(0.45572207,0.26089918){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Pepper pose...\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=14]{Architettura.pdf}}%
+    \put(0.46321526,0.32901907){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Response\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=15]{Architettura.pdf}}%
+    \put(0.46321526,0.36307902){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Request\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=16]{Architettura.pdf}}%
+    \put(0.46321526,0.41008174){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Pepper head mover...\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=17]{Architettura.pdf}}%
+    \put(0.27724796,0.41348774){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Desired movement description\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=18]{Architettura.pdf}}%
+    \put(0.32493188,0.33174387){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Result\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=19]{Architettura.pdf}}%
+    \put(0.28065395,0.28133515){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Desired pose desctiption\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=20]{Architettura.pdf}}%
+    \put(0.31811989,0.20912807){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Result\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=21]{Architettura.pdf}}%
+    \put(0.31811989,0.14782016){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Message\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=22]{Architettura.pdf}}%
+    \put(0.31811989,0.07629428){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Result\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=23]{Architettura.pdf}}%
+    \put(0.89032698,0.26702997){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}NaoQI SDK...\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=24]{Architettura.pdf}}%
+    \put(0.82425068,0.05585831){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Topic...\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=25]{Architettura.pdf}}%
+    \put(0.58719346,0.02520436){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Subscr...\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=26]{Architettura.pdf}}%
+    \put(0.39168937,0.51566757){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Object Detection...\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=27]{Architettura.pdf}}%
+    \put(0.83446866,0.15803815){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Publish\end{tabular}}}}%
+  \end{picture}%
+\endgroup%
