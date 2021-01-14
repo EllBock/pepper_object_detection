@@ -1,3 +1,0 @@
-pepper_cam_topic: /pepper_robot/camera/front/camera/image_raw
-detector_path: <PATH>
-dependencies_path: <PATH>

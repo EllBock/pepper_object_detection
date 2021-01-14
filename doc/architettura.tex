@@ -20,6 +20,22 @@ Qua parliamo anche del meccanismo scelto di comunicazione tra i nodi.
 
 \subsection{Server di Object Detection}
 
+Come anticipato, uno dei tre nodi principali del sistema si occupa di esporre un servizio di object detection. 
+Questo servizio è implementato attraverso una classe chiamata \verb|PepperObjectDetectorService|, il cui diagramma UML (semplificato) è riportato in figura~\ref{fig:detector_uml}.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{DetectorUml}
+	\caption{Diagramma UML (semplificato) classe \texttt{PepperObjectDetectorService}}
+	\label{fig:detector_uml}
+\end{figure}
+
+Nel costruttore della classe viene inizializzato il servizio ROS, al quale viene associato come handler il metodo \verb|detect_objects|, e viene inoltre creato un oggetto del tipo \verb|Detector|, che carica il modello di object detection dal percorso fornito e lo esegue sugli input che gli vengono sottomessi tramite chiamata. Il \verb|Detector| viene utilizzato in \verb|detect_objects| per eseguire la detection sugli input inviati al servizio.
+
+Quando il nodo server viene eseguito, viene istanziato un oggetto del tipo 
+\verb|PepperObjectDetectorService|, ed il suo metodo \verb|stop| viene registrato per l'esecuzione al momento dello shutdown del nodo, in modo tale che il servizio venga stoppato quando l'esecuzione del server termina. 
+Infine il nodo entra in \verb|spin|, in modo da restare in ascolto delle richieste all'object detector.
+
 \subsection{Server di interfaccia verso Pepper}
 
 \subsection{Nodo Master}
