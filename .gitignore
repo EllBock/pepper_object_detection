@@ -2,6 +2,10 @@
 detector_node/__pycache__/
 visualization_node/__pycache__/
 src/pepper_object_detection/__pycache__/
+config.bak/
+html/
+latex/
+doxygen_config
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
