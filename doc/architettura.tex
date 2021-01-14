@@ -40,7 +40,27 @@ Infine il nodo entra in \verb|spin|, in modo da restare in ascolto delle richies
 
 \subsection{Nodo Master}
 
-Il nodo Master (come \emph{puppet master}, ossia il burattinaio) è stato concepito come il pezzo centrale della nostra applicazione. Questo nodo si interfaccia con tutti i nodi dell'architettura, ed esegue tutti i passi chiave del task in modo sequenziale. La sequenza di passi è strettamente legata al task, ed è estremamente semplice scrivere un nuovo nodo che lo sostituisca ed esegua qualsiasi altro task invocando le funzioni di interfaccia disponibili.
+Il nodo Master (come \emph{puppet master}, ossia il burattinaio) è stato concepito come il pezzo centrale della nostra applicazione. Questo nodo si interfaccia con tutti i nodi dell'architettura, ed esegue i passi chiave del task in maniera sequenziale. La sequenza di passi è strettamente legata al task, e risulta molto semplice implementare un nuovo nodo che lo sostituisca per personalizzare o modificare i passi, compatibilmente con le interfacce che sono a disposizione nella nostra architettura.
 
 Abbiamo scelto l'approccio sequenziale per semplicità di implementazione. Ciò non toglie che alcune delle azioni possano ottimizzate tramite parallelismi e sincronizzazioni, ma è stato scelto di posticipare questi miglioramenti per dare precedenza al funzionamento completo del sistema secondo le specifiche.
 
+Qui presentiamo la sequenza di operazioni che compie il nodo.
+% FRASE DI INIZIO DELLE FASI
+\begin{enumerate}
+	\item Aspetta che tutti i servizi siano online prima di poter proseguire.
+	\item Porta il robot in una posizione neutra con il servizio \verb|pepper_pose| del nodo interfaccia. 
+	\item Fa muovere la testa al robot in alcune posizioni predefinite, in cui verrà ``scattata'' una fotografia. Utilizza il servizio \verb|pepper_head_mover| per passare delle traiettorie con posizione singola, visto che dovrà aspettare una immagine dal topic della camera del robot. Nell'attuale implementazione, vengono assunte dieci posizioni che dividono la vista del robot in una matrice $5 \times 2$, in modo che le immagini risultanti siano leggermente sovrapposte.
+	\item Esegue lo stitching delle immagini catturate con la libreria OpenCV, ottenendo così un'immagine panoramica di tutta la scena.
+	\item Richiede al servizio \verb|pepper_object_detection| gli oggetti presenti nell'immagine panoramica.
+	\item Genera una frase per il robot, dividendo gli oggetti trovati tra sinistra, centro e destra, che viene poi inviata al servizio \verb|pepper_tts| per essere riprodotta.
+\end{enumerate}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{panorama}
+	\caption{Vista del robot dopo l'image stitching.}\label{fig:panorama}
+\end{figure}
+
+Una scelta chiave che abbiamo preso è stata quella di eseguire uno stitching sulle immagini della vista (figura~\ref{fig:panorama}). I vantaggi di questo approccio sono molteplici: \begin{enumerate*}[label={(\arabic*)}] \item siamo in grado rilevare efficacemente oggetti che occupano uno spazio che vada oltre la singola immagine (es.\@: un tavolo); \item siamo in grado di evitare che oggetti piccoli divisi su più immagini vengano rilevati più volte, o nessuna; \item permette di allargare il campo visivo a piacere, aggiungendo più catture sia in orizzontale che in verticale.\end{enumerate*} Utilizzando altri approcci, alcune di queste proprietà sarebbero state sostanzialmente più complicate da implementare, e molto probabilmente non avrebbero avuto la stessa robustezza.
+
+Avere una sola immagine fa sì che il detector lavori una sola volta. Se ciò sia effettivamente vantaggioso rispetto ad effettuare la detection su più immagini separate dipende da due fattori: il numero di immagini su cui fare la detection e il modello utilizzato. Nel caso di più immagini potrebbe bastare un detector leggero, visto che queste sono piccole e gli oggetti sono di meno e occupano gran parte della scena. Nel nostro caso, invece, l'immagine risulterà più grande, e soprattutto conterrà più oggetti che occuperanno, relativamente alle dimensioni, meno spazio. Come vedremo nel prossimo paragrafo, sarà necessaria una rete più precisa, soprattutto nel localizzare oggetti piccoli.
