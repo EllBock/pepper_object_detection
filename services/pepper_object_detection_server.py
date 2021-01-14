@@ -14,24 +14,37 @@ from pepper_object_detection.classmap import category_map as classmap
 from vision_msgs.msg import Detection2D, Detection2DArray, ObjectHypothesisWithPose
 import logging
 
-"""
-    This class takes care of managing the lifecycle of the ROS Object Detection Service, by starting and stopping
-    the service and serving requests submitted to it.
-"""
 class PepperObjectDetectorService():
+    """
+        This class takes care of managing the lifecycle of the ROS Object Detection Service, by starting and stopping
+        the service and serving requests submitted to it.
+    """
 
     def __init__(self, detector_path):
+        """
+        Args:
+            detector_path (string): path to the folder containing the object recognition model. Must be in a format compatible
+            with tensorflow.saved_model.load (https://www.tensorflow.org/api_docs/python/tf/saved_model/load). Note that the 
+            path must point to the folder, not the model, since the loading function automatically searches for supported file types.
+        """
         self._detection_model = Detector(detector_path)
         self._service = rospy.Service('pepper_object_detection', pepper_object_detection, self.detect_objects)
         pass
 
     def detect_objects(self, data):
         """
-            This function detects and classifies the objects in the image provided through a Service Request by running on her the provided
-            detection model. Returns a vision_msgs/Detection2DArray, for which each detection is populated only with the bbox and results fields. Moreover,
-            for what it concerns the results field, each result is populated only with the id and score fields.
-            All the other fields are not significant for this application, so they have been ignored.
+        This function detects and classifies the objects in the image provided through a Service Request by running on her the provided
+        detection model. Returns a vision_msgs/Detection2DArray, for which each detection is populated only with the bbox and results fields. Moreover,
+        for what it concerns the results field, each result is populated only with the id and score fields.
+        All the other fields are not significant for this application, so they have been ignored.
+
+        Args:
+            data (sensor_msgs/Image): image to perform object detection on.
+
+        Returns:
+            pepper_object_detectionResponse: response encapsulating data regarding detected objects, structured as in service definition.
         """
+
         # Convert image from sensor_msgs/Image to numpy array
         img_np = ros_numpy.numpify(data.img) 
         rospy.loginfo('Object detection server computing predictions...')
@@ -56,6 +69,12 @@ class PepperObjectDetectorService():
         return response
     
     def stop(self, reason = 'User request'):
+        """
+        Stops the Object Detection Service server.
+
+        Args:
+            reason (str, optional): The reason why the service is being stopped. Defaults to 'User request'.
+        """
         rospy.loginfo('Shutting down object detection server...')
         self._service.shutdown(reason)
         return

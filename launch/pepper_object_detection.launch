@@ -12,6 +12,7 @@
 	</include>	
 
 	<node name="nao_server" pkg="pepper_object_detection" type="pepper_nao_server.py" output="screen" />
+	<!-- Uncomment the following lines if you're not using pepper_bringup's launch file -->
 	<!-- Set Pepper's IP address. Definition is in /home/mivia/pepper_object_detection_ws/git_packages/naoqi_bridge/naoqi_driver_py/src/naoqi_driver/naoqi_node.py at line 74/80. -->
 	<!-- param name="pip" value="0.0.0.1" /> -->
 	<node name="object_detection_server" pkg="pepper_object_detection" type="pepper_object_detection_server.py" output="screen" />

@@ -1,3 +1,5 @@
+# Say a sentence
+
 string message
 ---
 bool result

@@ -1,3 +1,5 @@
+# Move along an axis, through some angles, in a given time.
+
 string axis
 float64[] angleLists
 float64[] timeLists

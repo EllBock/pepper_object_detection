@@ -1,4 +1,9 @@
-# https://gist.github.com/xhlulu/f7735970704b97fd0b72203628c1cc77
+"""
+Microsoft's Label Map for the COCO dataset, as a python dictionary
+
+https://gist.github.com/xhlulu/f7735970704b97fd0b72203628c1cc77
+"""
+
 
 category_map = {
     1: 'person',

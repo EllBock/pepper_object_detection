@@ -1,3 +1,6 @@
+# Go to one of predefined poses:
+# http://doc.aldebaran.com/2-0/family/juliette_technical/postures_juliette.html#juliette-postures
+
 string message
 ---
 bool result

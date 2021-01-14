@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+"""
+This module implements our application's master node, which coordinates capabitilies offered by other nodes to implement the sequence
+of operations which completed the required task.
+"""
+
 import sys
 import rospy
 import ros_numpy
@@ -35,6 +40,15 @@ elif int(cv_version[0]) < 4:
 
 # A simpler interface to the image stiching algorithm from OpenCV
 def stitch(images):
+    """
+    Stitches two or more images to create a 'panorama' image.
+
+    Args:
+        images ([numpy.ndarray]): list of images to stitch 
+
+    Returns:
+        (int, numpy.ndarray): A status code, which is different form zero if an error has occurred, and the image resulting from the stitching process.
+    """
     stitcher = cv2.Stitcher_create(cv2.Stitcher_PANORAMA)
     return stitcher.stitch(images)
 
@@ -42,6 +56,17 @@ def stitch(images):
 # Function to generate a sentence with objects
 # which counts objects and separates them with a separator
 def objects_sentence(objects: dict, separator=", "):
+    """
+    Creates a string representing the sentence that Pepper will say to list the object they saw.
+
+    Args:
+        objects (dict): A dictionary mapping each object recognized in the image to the number of its instances found.
+        separator (str, optional): Separator to use to separate objects in the sentence. Defaults to ", ".
+
+    Returns:
+        string: A string representing the sentence that Pepper will say to list the object they saw, containing each object 
+        recognized in the image and the number of its instances found.
+    """
     if len(objects) == 0:
         return "nothing"
 
@@ -102,7 +127,7 @@ except rospy.ROSException as e:
 
 # The robot goes to a neutral position
 try:
-    res = pose_proxy('StandInit')
+    res = pose_proxy('StandInit') # http://doc.aldebaran.com/2-0/family/juliette_technical/postures_juliette.html#juliette-postures
     if not res:
         i = 0
         while(not res):

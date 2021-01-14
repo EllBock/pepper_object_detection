@@ -27,11 +27,18 @@ class NaoServer(NaoqiNode):
 
 
     def moveHead(self, req):
-        '''
+        """
         This method calls "angleInterpolation" method of the NAOqi proxy named "ALMotion",
         which interpolates the req.axis (head yaw or head pitch) to req.angleLists radiants
         in req.timeLists seconds.
-        '''
+
+        Args:
+            req (pepper_object_detection.srv.pepper_head_moverRequest): request, structured as in service definition.
+
+        Returns:
+            pepper_head_moverResponse: operation status.
+        """
+
         debug_message = 'Respectively, the angles list and the times list recived: {}, {}'
         rospy.logdebug(debug_message.format(req.angleLists, req.timeLists))
         try:
@@ -43,10 +50,17 @@ class NaoServer(NaoqiNode):
 
 
     def say(self,data):
-        '''
+        """
         This method calls the "say" method of the NAOqi proxy named "ALTextToSpeech",
         which which makes the robot say the data.message received string.
-        '''
+
+        Args:
+            data (pepper_ttsRequest): request encapsulating the sentence to say, structured as in service definition.
+
+        Returns:
+            pepper_ttsResponse: operation status.
+        """
+
         self.speech.say(data.message)
         debug_message = 'Pepper has said: {}'
         rospy.logdebug(debug_message.format(data.message))
@@ -54,10 +68,17 @@ class NaoServer(NaoqiNode):
 
 
     def setPose(self, req):
-        '''
+        """
         This method calls the "goToPosture" method of the NAOqi proxy named "ALRobotPosture",
         which makes the robot go to the req.message posture.
-        '''
+
+        Args:
+            req (pepper_poseRequest): request encapsulating target pose, structured as in service definition.
+
+        Returns:
+            pepper_poseResponse: operation status.
+        """
+
         try:
             self.posture.goToPosture(req.message, 0.1)
             message = "Pepper has reached the {} posture."
