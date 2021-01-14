@@ -13,7 +13,7 @@ from cv_bridge import CvBridge
 TRIAL_NUMBER_FAILURE = 10
 DEBUG = True
 
-# Inizializzazione del nodo ROS
+# Initializing ROS node
 pepper_cam_topic = rospy.get_param('pepper_cam_topic')
 cv2_dir = rospy.get_param('dependencies_path')
 rospy.init_node('master_node')
@@ -23,7 +23,7 @@ if cv2_dir != "":
 
 import cv2
 
-# Lo stitcher non funziona con OpenCV <3.2.0
+# Stitcher does not work properly with OpenCV<=3.2.0
 cv_version = cv2.__version__.split(".")
 if int(cv_version[0]) < 3 or (int(cv_version[0]) == 3 and int(cv_version[1]) <= 2):
     rospy.logfatal("OpenCV {cv2.__version__} is not supported. OpenCV > 3.2.0 required. Exiting..")
@@ -33,14 +33,14 @@ elif int(cv_version[0]) < 4:
 
 
 
-# Interfaccia semplificata allo Stitcher di CV2
+# A simpler interface to the image stiching algorithm from OpenCV
 def stitch(images):
     stitcher = cv2.Stitcher_create(cv2.Stitcher_PANORAMA)
     return stitcher.stitch(images)
 
 
-# Funzione per generare una lista di oggetti
-# dividendoli con un separatore e tenendo conto del loro numero
+# Function to generate a sentence with objects
+# which counts objects and separates them with a separator
 def objects_sentence(objects: dict, separator=", "):
     if len(objects) == 0:
         return "nothing"
@@ -48,27 +48,27 @@ def objects_sentence(objects: dict, separator=", "):
     sentence = ""
     keys = list(objects.keys())
 
-    # Evitiamo che l'ordine degli oggetti sia arbitrario e costante
+    # We don't want the order of objects to be arbitrary or predefined
     random.shuffle(keys)
     
-    # Per ogni classe, il robot dice il numero di oggetti e la classe
+    # For each class of objects, we print the number and the class
     for k in keys:
         n = objects[k]
         if n > 1:
-            # Un plurale naive
+            # Naive approach to plural
             o = k + "s"
         else:
             o = k
         sentence = sentence + f"{n} {o}" + separator
 
-    # Eliminiamo l'ultimo separatore dalla frase
+    # Deleting the last separator from the sentence
     sentence = sentence[:-len(separator)] 
 
     return sentence
 
 
 
-# Aspettiamo che tutti i servizi necessari siano online
+# We wait for each service to be online
 try:
     rospy.loginfo("Waiting for TTS service...")
     rospy.wait_for_service('pepper_tts', 20)
@@ -100,7 +100,7 @@ except rospy.ROSException as e:
 
 
 
-# Portiamo il robot in una posizione neutra
+# The robot goes to a neutral position
 try:
     res = pose_proxy('StandInit')
     if not res:
@@ -118,11 +118,11 @@ except rospy.ServiceException as e:
 
 rospy.loginfo("Setup completed.")
 
-# Acquisizione delle immagini
+
+# We then acquire images from a series of positions
 img_msgs = []
 
-# Definiamo una serie di posizioni assolute che la testa del robot
-# deve assumere.
+# We define a series of absolute positions for the robot's head.
 # Format: (Axis, Angle (rad), Time (s), Take photo?)
 
 # 10 immagini, 0.4 di scarto
@@ -140,8 +140,8 @@ positions = [("HeadYaw", 0.8, 1.6, False),
              ("HeadYaw", 0.0, 0.8, False),
              ("HeadPitch", 0.0, 1.2, False)]
 
-# Eseguiamo i movimenti richiesti, salvando l'immagine pubblicata sul topic
-# della camera del robot quando il flag è True.
+# We follow the trajectory and catch images from the 
+# camera's topic when the flag is True
 rospy.loginfo("Scanning the area...")
 for p in positions:
     angleLists = []
@@ -171,47 +171,46 @@ for p in positions:
             exit() 
 
 
-# Eseguiamo lo stitching delle immagini
+# We execute the image stitching
 images = []
 for i in range(len(img_msgs)):
     images.append(ros_numpy.numpify(img_msgs[i]))
 
 res, panorama = stitch(images)
 
-# In caso di errore, usciamo perché è probabilmente un problema 
-# delle posizioni scelte per la testa
+# We exit if there's an error with the stitching
 if panorama is None or res != 0:
     rospy.logerr(f"Image Stitching failed: status {res}. Exiting..")
     exit()
 
 
-# Nel caso mostriamo e salviamo una copia del risultato
+# For debug purposes, we save the panorama image.
 if DEBUG:
     cv2.imshow("Panorama View", panorama)
     cv2.waitKey(100)
     cv2.imwrite('panorama.jpg', panorama)
 
-# Generiamo un messaggio Image
+# We generate an Image message
 rospy.loginfo("Detecting objects...")
 bridge = CvBridge()
 pnr_msg = bridge.cv2_to_imgmsg(panorama)
 
-# che viene inviato al servizio di detection
+# that we send to the detector
 det = detector_proxy(pnr_msg).detections
 
 
-# Dividiamo la scena nelle tre zone: sinistra, centro e destra
+# We divide the area in left, center and right areas
 h,w,_ = panorama.shape
 left_center_bound = int(w/3)
 center_right_bound = int(2*w/3)
 
-# Per ogni zona salveremo gli oggetti come chiavi in un dizionario,
-# associati al numero dello stesso tipo di oggetto in una determinata zona
+# For each area, we save each object as a key
+# with value the number of objects of the same class found in the same area
 objects = {'sx':{}, 'center':{}, 'dx':{}}
 
 
 for d in det.detections:
-    # Manipoliamo i risultati della detection
+    # We read detection results
     c = d.results[0].id
     s = d.results[0].score
     bbcenter_x = d.bbox.center.x * w
@@ -221,7 +220,7 @@ for d in det.detections:
     p1 = (int(b[1]*w+.5), int(b[0]*h+.5))
     p2 = (int((b[3]+b[1])*w+.5), int((b[2]+b[0])*h+.5))
     
-    # Controlliamo dove ricade il centro degli oggetti 
+    # We check the area where the center of a bounding box is
     if bbcenter_x < left_center_bound:
         area = 'sx'
     elif bbcenter_x < center_right_bound:
@@ -229,8 +228,7 @@ for d in det.detections:
     else:
         area = 'dx'
     
-    # Inseriamo l'oggetto nel dizionario adeguato, o se già presente
-    # aumentiamo il contatore associato a quell'oggetto
+    # We insert the object in the right dict
     ob_class = classmap[c]
     if ob_class in objects[area]:
         objects[area][ob_class] += 1
@@ -239,7 +237,7 @@ for d in det.detections:
 
     rospy.logdebug(f"Found {ob_class}: {p1}, {p2} ({area}); score {s}")
 
-    # nel caso aggiungiamo all'immagine il risultato della detection
+    # For debug purposes, we add the bbs to the panorama image
     if DEBUG:
         col = (255,0,0) 
         cv2.rectangle(panorama, p1, p2, col, 2)
@@ -247,12 +245,12 @@ for d in det.detections:
         cv2.putText(panorama, "%s %.2f" % (ob_class,s), p1, cv2.FONT_HERSHEY_SIMPLEX, 0.8, col, 2)
 
 
-# Generazione della frase:
+# We generate a sentence
 sentence = "on the left, i see " + objects_sentence(objects['sx']) + ";"
 sentence = sentence + " in front of me, i see " + objects_sentence(objects['center']) + ";"
 sentence = sentence + " on the right, i see " + objects_sentence(objects['dx']) + ";"
 
-# Il robot parla
+# We send the sentence to the tts
 rospy.loginfo(f"TTS: {sentence}")
 try:
     res = tts_proxy(sentence)
@@ -268,8 +266,8 @@ except rospy.ServiceException as e:
     rospy.logerr("TTS Service call failed: %s"%e)
     exit()
 
-# Nel caso mostriamo l'immagine con i bounding box della detection,
-# e la salviamo su file.
+# For debug purposes we can show the image on screen
+# and save it on the filesystem.
 if DEBUG:
     panorama = cv2.line(panorama, (left_center_bound, 0), (left_center_bound, h), (0, 255, 0), 2)
     panorama = cv2.line(panorama, (center_right_bound, 0), (center_right_bound, h), (0, 255, 0), 2)

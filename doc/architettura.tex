@@ -39,3 +39,8 @@ Infine il nodo entra in \verb|spin|, in modo da restare in ascolto delle richies
 \subsection{Server di interfaccia verso Pepper}
 
 \subsection{Nodo Master}
+
+Il nodo Master (come \emph{puppet master}, ossia il burattinaio) è stato concepito come il pezzo centrale della nostra applicazione. Questo nodo si interfaccia con tutti i nodi dell'architettura, ed esegue tutti i passi chiave del task in modo sequenziale. La sequenza di passi è strettamente legata al task, ed è estremamente semplice scrivere un nuovo nodo che lo sostituisca ed esegua qualsiasi altro task invocando le funzioni di interfaccia disponibili.
+
+Abbiamo scelto l'approccio sequenziale per semplicità di implementazione. Ciò non toglie che alcune delle azioni possano ottimizzate tramite parallelismi e sincronizzazioni, ma è stato scelto di posticipare questi miglioramenti per dare precedenza al funzionamento completo del sistema secondo le specifiche.
+
