@@ -5,7 +5,7 @@ src/pepper_object_detection/__pycache__/
 config.bak/
 html/
 latex/
-config
+doxygen_config
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
