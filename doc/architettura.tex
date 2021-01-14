@@ -1,0 +1,25 @@
+\section{Architettura}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Architettura}
+	\caption{Architettura del software}
+	\label{fig:architecture}
+\end{figure}
+
+Il nostro software si compone di tre nodi:
+\begin{itemize}
+    \item Un nodo che implementa il servizio di object detection, che riceve in input un’immagine da analizzare e, per ogni oggetto nell’immagine, restituisce il relativo bounding box, la classe ed il livello di confidenza relativo alla predizione.
+    \item Un nodo che implementa tre servizi che forniscono un’interfaccia verso le funzionalità di text to speech, gestione della posa e movimento della testa di Pepper.
+    \item Un nodo master che implementa la funzionalità richiesta dall’homework acquisendo le immagini dal topic della camera di Pepper e utilizzando i servizi offerti dagli altri due nodi.
+\end{itemize}
+Per l’interfacciamento da e verso Pepper viene utilizzato il NaoQi SDK.
+
+Qua parliamo anche del meccanismo scelto di comunicazione tra i nodi.
+
+
+\subsection{Server di Object Detection}
+
+\subsection{Server di interfaccia verso Pepper}
+
+\subsection{Nodo Master}
