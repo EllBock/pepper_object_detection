@@ -7,16 +7,21 @@
 	\label{fig:architecture}
 \end{figure}
 
-Il nostro software si compone di tre nodi:
+Il nostro software si compone dei seguenti tre nodi.
 \begin{itemize}
     \item Un nodo che implementa il servizio di object detection, che riceve in input un’immagine da analizzare e, per ogni oggetto nell’immagine, restituisce il relativo bounding box, la classe ed il livello di confidenza relativo alla predizione.
     \item Un nodo che implementa tre servizi che forniscono un’interfaccia verso le funzionalità di text to speech, gestione della posa e movimento della testa di Pepper.
-    \item Un nodo master che implementa la funzionalità richiesta dall’homework acquisendo le immagini dal topic della camera di Pepper e utilizzando i servizi offerti dagli altri due nodi.
+    \item Un nodo master che implementa la funzionalità richiesta dall’homework, acquisendo le immagini dal topic della camera di Pepper e utilizzando i servizi offerti dagli altri due nodi.
 \end{itemize}
-Per l’interfacciamento da e verso Pepper viene utilizzato il NaoQi SDK.
+Per l’interfacciamento da e verso Pepper viene utilizzato il NAOqi SDK.
 
-\todo{Parliamo del meccanismo di comunicazione tra i nodi.}
+Abbiamo implementato le varie funzionalità come servizi ROS perché questo permette di modellarle come risorse condivise tra i vari nodi e di gestire gli accessi ad esse. L'utilizzo del paradigma request-response al posto di quello publish-subscribe permette inoltre di attendere e verificare l'esito di un'operazione, il che è importante ad esempio nella gestione dei movimenti del robot.
+Non abbiamo utilizzato le azioni ROS (non bloccanti) perché per la nostra applicazione era comodo bloccare il sistema in attesa del completamento delle operazioni sul robot, e non era necessario fare altro mentre è in corso una detection.
+Per quanto riguarda le funzionalità di object detection, fornirle tramite un servizio ROS rende non necessario inserire nel messaggio che trasporta il risultato della detection l'immagine di riferimento, in quanto il nodo che effettua la richiesta al servizio sa quale immagine sta fornendo in input, permettendo così di mantenere il messaggio più snello e di semplificare la sincronizzazione tra chi richiede un'operazione di detection ed il nodo che la realizza.
 
+Vorremmo far notare che il detector restituisce il risultato al solo nodo che invia la richiesta. Questo comportamento potrebbe sembrare limitante nel caso in cui il risultato della detection su di una stessa immagine dovesse servire per più nodi, perché si potrebbe pensare di dover invocare più volte il servizio fornendo la stessa immagine in input. In realtà, questa cosa può essere evitata facendo in modo che un solo nodo invochi il servizio e pubblichi il risultato ottenuto su di un apposito topic. Questo sistema, rispetto all'utilizzo del paradigma publish-subscribe, consente di conservare la possibilità di ricevere un feedback sul risultato dell'operazione. 
+
+Infine, per gestire i parametri di configurazione utilizziamo il parameter server di ROS, ed un file di configurazione che viene automaticamente caricato su di esso tramite il nostro launch file. 
 
 \subsection{Server di Object Detection}
 
@@ -78,4 +83,4 @@ Qui presentiamo la sequenza di operazioni che compie il nodo.
 
 Una scelta chiave che abbiamo preso è stata quella di eseguire uno stitching sulle immagini della vista (figura~\ref{fig:panorama}). I vantaggi di questo approccio sono molteplici: \begin{enumerate*}[label={(\arabic*)}] \item siamo in grado rilevare efficacemente oggetti che occupano uno spazio che vada oltre la singola immagine (es.\@: un tavolo); \item siamo in grado di evitare che oggetti piccoli divisi su più immagini vengano rilevati più volte, o nessuna; \item permette di allargare il campo visivo a piacere, aggiungendo più catture sia in orizzontale che in verticale.\end{enumerate*} Utilizzando altri approcci, alcune di queste proprietà sarebbero state sostanzialmente più complicate da implementare, e molto probabilmente non avrebbero avuto la stessa robustezza.
 
-Avere una sola immagine fa sì che il detector lavori una sola volta. Se ciò sia effettivamente vantaggioso rispetto ad effettuare la detection su più immagini separate dipende da due fattori: il numero di immagini su cui fare la detection e il modello utilizzato. Nel caso di più immagini potrebbe bastare un detector leggero, visto che queste sono piccole e gli oggetti sono di meno e occupano gran parte della scena. Nel nostro caso, invece, l'immagine risulterà più grande, e soprattutto conterrà più oggetti che occuperanno, relativamente alle dimensioni, meno spazio. Come vedremo nel prossimo paragrafo, sarà necessaria una rete più precisa, soprattutto nel localizzare oggetti piccoli.
+Avere una sola immagine fa sì che il detector lavori una sola volta. Se ciò sia effettivamente vantaggioso rispetto ad effettuare la detection su più immagini separate dipende da due fattori: il numero di immagini su cui fare la detection e il modello utilizzato. Nel caso di più immagini potrebbe bastare un detector leggero, visto che queste sono piccole e gli oggetti sono di meno e occupano gran parte della scena. Nel nostro caso, invece, l'immagine risulterà più grande, e soprattutto conterrà più oggetti che occuperanno, relativamente alle dimensioni, meno spazio. Come vedremo nel prossimo paragrafo, sarà necessaria una rete più precisa nel localizzare oggetti piccoli, e quindi più complessa.
