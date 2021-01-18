@@ -45,7 +45,7 @@ Infine il nodo entra in \verb|spin|, in modo da restare in ascolto delle richies
 
 Il nodo di interfaccia verso Pepper è stato implementato per esporre agli altri nodi le funzionalità offerte dal NAOqi Framework\footnote{Il framework usato per programmare i robot dell'\textbf{Aldebaran}, risponde alle più comuni esigenze della robotica.} sotto forma di servizi ROS, per permettergli di astrarsi dalle meccaniche di gestione dell'interfacciamento col robot. Inoltre, il NAOqi Framework è compatibile soltanto con Python 2, e quindi circoscrivere l'utilizzo delle sue funzioni ad un singolo nodo permette agli altri nodi di utilizzare le versioni più recenti del linguaggio, evitando così di doversi appoggiare ad elementi di Python ormai deprecati.\todo{RISOLTO: sistemare, specificando che non è stato fatto solo per python2}
 
-% Quest'ultimo è compatibile soltanto con Python 2, per cui bbiamo sfruttato l'interoperabilità tra nodi programmati in diversi linguaggi per confinare l'utilizzo di linguaggio, ormai deprecato, alla più piccola parte possibile dell'architettura. 
+% Quest'ultimo è compatibile soltanto con Python 2, per cui abbiamo sfruttato l'interoperabilità tra nodi programmati in diversi linguaggi di ROS per confinare l'utilizzo di Python 2, ormai deprecato, alla più piccola parte possibile dell'architettura. 
 
 Come anticipato, questo nodo di interfaccia si occupa di esporre tre servizi: text to speech, gestione della posa e movimento della testa di Pepper. 
 Questi servizi sono stati implementati attraverso una classe chiamata \verb|NaoServer|, nel cui costruttore vengono inizializzati i tre servizi ROS e viene configurato il robot per utilizzare la lingua inglese.
