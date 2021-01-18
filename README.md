@@ -6,7 +6,7 @@
 * OpenCV 4
 * TensorFlow >= 2
 * [rospkg](https://wiki.ros.org/rospkg) 
-* A correctly set-up workspace with
+* A correctly set-up catkin workspace with
   * NaoQI SDK
   * from the [ros-naoqi](https://github.com/ros-naoqi) repos
     * [pepper_robot](https://github.com/ros-naoqi/pepper_robot)
