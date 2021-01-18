@@ -43,12 +43,12 @@ Infine il nodo entra in \verb|spin|, in modo da restare in ascolto delle richies
 
 \subsection{Server di interfaccia verso Pepper}
 
-Il nodo di interfaccia verso Pepper è stato implementato per esporre agli altri nodi le funzionalità offerte dal NAOqi Framework\footnote{Il framework usato per programmare i robot dell'Aldebaran, risponde alle più comuni esigenze della robotica.}. , pertanto, circoscrivere l'utilizzo delle sue funzioni ad un singolo nodo permette agli altri nodi di utilizzare le versioni più recenti del linguaggio, evitando così di doversi appoggiare ad elementi di Python ormai deprecati.\todo{sistemare, specificando che non è stato fatto solo per python2} 
+Il nodo di interfaccia verso Pepper è stato implementato per esporre agli altri nodi le funzionalità offerte dal NAOqi Framework\footnote{Il framework usato per programmare i robot dell'\textbf{Aldebaran}, risponde alle più comuni esigenze della robotica.} sotto forma di servizi ROS, per permettergli di astrarsi dalle meccaniche di gestione dell'interfacciamento col robot. Inoltre, il NAOqi Framework è compatibile soltanto con Python 2, e quindi circoscrivere l'utilizzo delle sue funzioni ad un singolo nodo permette agli altri nodi di utilizzare le versioni più recenti del linguaggio, evitando così di doversi appoggiare ad elementi di Python ormai deprecati.\todo{RISOLTO: sistemare, specificando che non è stato fatto solo per python2}
 
 % Quest'ultimo è compatibile soltanto con Python 2, per cui bbiamo sfruttato l'interoperabilità tra nodi programmati in diversi linguaggi per confinare l'utilizzo di linguaggio, ormai deprecato, alla più piccola parte possibile dell'architettura. 
 
-Come anticipato, si occupa di esporre tre servizi: text to speech, gestione della posa e movimento della testa di Pepper. 
-Questi servizi sono stati implementati attraverso una classe chiamata \verb|NaoServer|, nel cui costruttore vengono inizializzati i tre servizi ROS e viene configurato il robot per utilzzare la lingua inglese.
+Come anticipato, questo nodo di interfaccia si occupa di esporre tre servizi: text to speech, gestione della posa e movimento della testa di Pepper. 
+Questi servizi sono stati implementati attraverso una classe chiamata \verb|NaoServer|, nel cui costruttore vengono inizializzati i tre servizi ROS e viene configurato il robot per utilizzare la lingua inglese.
 
 Al servizio \verb|pepper_head_mover| è stato associato come handler il metodo \verb|moveHead|, che offre un'interfaccia simile a quella del metodo \verb|angleInterpolation| del proxy NAOqi \verb|ALMotion|, al quale inoltrerà la richiesta di movimento. Difatti, il metodo del proxy NAOqi offre anche la possibilità di effettuare movimenti rispetto ad indicazioni relative, mentre il nostro servizio accetta soltanto riferimenti assoluti.
 
@@ -58,7 +58,10 @@ Al servizio \verb|pepper_tts| è stato associato come handler il metodo \verb|sa
 
 I tre servizi, portato a termine il lavoro richiesto, inviano al nodo che li invoca un valore booleano, indice del successo o insuccesso dell'operazione.
 
-Quando il nodo server viene eseguito entra in \verb|spin|, in modo da restare in attesa di ricevere richieste. \todo{siccome non stoppiamo il servizio quando il nodo muore, verificare se restano i servizi appesi senza handler o vengono killati pure loro}
+Quando il nodo server viene eseguito entra in \verb|spin|, in modo da restare in attesa di ricevere richieste. 
+\todo{RISOLTO: siccome non stoppiamo il servizio quando il nodo muore, verificare se restano i servizi appesi senza handler o vengono killati pure loro}
+\begin{comment} Se killo il nodo server il servizio risulta comunque irraggiungibile (la wait for service va in timeout), quindi stoppando il server viene comunque stoppato il servizio.\end{comment}
+
 
 \subsection{Nodo Master}
 
